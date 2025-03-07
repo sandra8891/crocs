@@ -13,6 +13,24 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 
 
+
+
+
+
+def gallery(request):
+    if request.method == 'POST' and 'image' in request.FILES: 
+        myimage = request.FILES['image']  
+        todo123=request.POST.get("todo")
+        todo321=request.POST.get("date")
+        todo311=request.POST.get("course")  
+        obj=Gallery(title1=todo123,title2=todo321,title3=todo311,feedimage=myimage,user=request.user)
+        obj.save()
+        data=Gallery.objects.all()
+        return redirect('adminindex')
+    
+    gallery_images = Gallery.objects.all()
+    return render(request, "galleryupload.html")
+
 def usersignup(request):
     if request.POST:
         email = request.POST.get('email')
@@ -52,7 +70,7 @@ def loginuser(request):
             login(request, user)
             request.session['username'] = username
             if  user.is_superuser:
-                return redirect('admin_home')
+                return redirect('adminindex')
             else:
                 return redirect('firstpage')
         else:
@@ -60,8 +78,14 @@ def loginuser(request):
     
     return render(request, 'login.html')
 
-def admin_home(request):
-    return render(request,"adminindex.html")
+def adminindex(request):
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to access this page.")
+        return redirect('loginuser')
+
+    data = Gallery.objects.all()
+    gallery_images = Gallery.objects.filter(user=request.user)
+    return render(request, 'adminindex.html', {"gallery_images": gallery_images})
 
 
 
@@ -103,6 +127,39 @@ def verifyotp(request):
     send_mail('Email Verification', message, email_from, recipient_list)
 
     return render(request, "otp.html")
+
+def delete_g(request,id):
+    feeds=Gallery.objects.filter(pk=id)
+    feeds.delete()
+    return redirect('index')
+
+def edit_g(request, pk):
+    gallery_item = Gallery.objects.filter(pk=pk).first()
+
+    if not gallery_item:
+        messages.error(request, "Gallery item not found.")
+        return redirect('index')
+
+    if request.method == "POST":
+        edit1 = request.POST.get('todo')
+        edit2 = request.POST.get('date')
+        edit3 = request.POST.get('course')
+
+
+        gallery_item.title1 = edit1
+        gallery_item.title2 = edit2
+        gallery_item.title3 = edit3
+
+        if 'image' in request.FILES:
+            gallery_item.feedimage = request.FILES['image']
+
+        gallery_item.save()
+
+        messages.success(request, "Gallery item updated successfully.")
+        return redirect('index')
+
+    else:
+        return render(request, 'edit_gallery.html', {'data': gallery_item})
 
 
 
@@ -192,6 +249,12 @@ def logoutuser(request):
     logout(request) 
     request.session.flush() 
     return redirect('loginuser') 
+
+
+def logoutadmin(request):
+    logout(request)
+    request.session.flush()
+    return redirect('firstpage')
 
 
 

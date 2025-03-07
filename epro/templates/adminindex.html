@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <title>index</title>
+</head>
+<body>
+
+    <div class="topnav">
+        <p>SIGN UP FOR 15% OFF</p>
+    </div>
+
+    <div class="nav">
+        <div class="logo">
+            <img  src="{% static 'image/crocslogo.svg' %}" alt="crocs">
+        </div>
+        <div class="left">
+            <div>SHOP NOW</div>
+            <div>REVIEWS</div>
+            <div>ABOUT US</div>
+            <div>CONTACT US</div>
+            <a href="{% url 'gallery'%}"><button>Upload a Product</button></a> 
+            <a href="{% url 'adminlogout' %}"><button>Logout</button></a>
+        </div>
+        <div class="right">
+            <div><input type="search" placeholder="Product Code"></div>
+            <div><i class="bi bi-search"></i></div>
+            <div><i class="bi bi-facebook"></i></div>
+        </div>
+    </div> 
+
+    <!-- Gallery -->
+    <div class="gallery-grid">
+        {% for i in gallery_images %}
+        <div>
+            <img src="{{ i.feedimage.url }}" alt="Gallery Image" width="300">
+            <span>{{ i.title1 }}</span>
+            <span>{{ i.title2 }}</span>
+            <span>{{ i.title3 }}</span>
+            <div class="button-group">
+                <a href="{% url 'edit_g' pk=i.id %}"><button class="edit-button">Edit</button></a>  
+                <a href="{% url 'deletion' i.id %}"><button class="delete-button">Delete</button></a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

@@ -13,14 +13,14 @@ body {
 /* Top Navigation */
 .topnav {
     background-color: black;
-    padding: 10px 20px; /* Add padding to the sides for spacing */
-    font-size: 1.2rem;
+    padding: 10px 20px;
+     font-size: 1.2rem;
     color: white;
     border-bottom: 1px solid #000;
-    display: flex;
-    justify-content: space-between; /* Space between items */
+    display: flex; 
+    justify-content: space-between; 
     align-items: center;
-  }
+  } 
   
   .topnav .sign-up-text {
     text-align: center;
@@ -39,9 +39,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
-    border: 1px solid black; /* Black border around the navigation */
-    padding: 0px;
+    background-color:black;  /* Set to a color matching your logo (Adjust to match logo) */
+    border: none; /* Remove border */
+    padding: 0px 40px;  /* Add padding on the left and right for spacing */
     position: relative;
 }
 
@@ -56,10 +56,18 @@ body {
 
 /* Logo Styling */
 .logo img {
-    width: 190px;
-    height: auto;
-    margin-left: 23px;
+    width: 150px; /* Adjust logo width to fit the navbar */
+    height: auto; /* Keep the aspect ratio of the logo */
+    margin-left: 0; /* Remove left margin to center logo */
+}
 
+.nav {
+    height: 90px; /* Adjust to match the desired height of the nav bar */
+}
+
+.logo img {
+    height: 100px; /* Adjust the height of the logo to fit well inside the nav bar */
+    width: auto; /* Let the width auto-adjust based on the height */
 }
 
 /* Left-side navigation links */
@@ -74,7 +82,7 @@ body {
 }
 
 .left a div {
-    color: black; /* Set color to black for the div inside the link */
+    color:white; /* Set color to black for the div inside the link */
     font-size: 1rem;
     cursor: pointer;
     padding: 5px 19px;

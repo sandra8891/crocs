@@ -1,0 +1,125 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and overall layout */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff; /* White background */
+    color: #333; /* Dark text color */
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Heading */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form styling */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 2px solid #000; /* Black border */
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+form input[type="file"],
+form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #000; /* Black border */
+    border-radius: 4px;
+    background-color: #fff; /* White background */
+}
+
+form button {
+    background-color: #000000;
+    color: #fff;
+    border: 2px solid #000; /* Black border */
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    display: block;
+    width: 100%;
+}
+
+form button:hover {
+    background-color: #000000; /* Darker green on hover */
+}
+
+form .ww,
+form .www {
+    width: 100%;
+}
+
+/* Gallery section */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.gallery div {
+    text-align: center;
+    border: 2px solid #000;
+    padding: 10px;
+    background-color: #fff;
+    width: 250px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.gallery img {
+    width: 100%;
+    max-width: 300px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.gallery span {
+    display: block;
+    font-size: 14px;
+    margin-top: 5px;
+    color: #555;
+}
+
+/* No images message */
+p {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+}
+
+/* Logout link */
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+}
+
+a:hover {
+    text-decoration: underline;
+}

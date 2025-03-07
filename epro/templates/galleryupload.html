@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/galleryupload.css' %}">
+    <title>gallery upload</title>
+</head>
+<body>
+    <body>
+        <h1>welcome</h1>
+     
+        <form action="{% url 'gallery' %}" method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+         <label for="image">Upload Image:</label>
+         <input type="file" name="image" id="image" required>
+         company
+         <input type="text" name="todo" class="ww"><br><br>
+         price
+         <input type="text" name="date" class="www"><br><br>
+         delivary type
+         <input type="text" name="course" class="ww"><br><br>
+         <button type="submit">Submit</button>
+         
+     </form>
+     
+        {% for i in gallery_images %}
+
+        {% if i.feedimage %}
+            <img src="{{ i.feedimage.url }}" alt="Gallery Image" width="300">
+            
+        {% else %}
+            <p>No image for this gallery item</p>
+        {% endif %}
+        <span>{{ i.title1 }}</span>
+        <span>{{ i.title2 }}</span>
+        <span>{{ i.title3 }}</span>
+    
+{% empty %}
+        <p>No images uploaded yet.</p>
+{% endfor %}
+
+     
+        <a href="{% url 'adminlogout' %}">logout</a>
+</body>
+</html>
