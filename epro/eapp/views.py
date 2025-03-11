@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -18,18 +15,34 @@ from .models import *
 
 
 def gallery(request):
-    if request.method == 'POST' and 'image' in request.FILES: 
-        myimage = request.FILES['image']  
-        todo123=request.POST.get("todo")
-        todo321=request.POST.get("date")
-        todo311=request.POST.get("course")  
-        obj=Gallery(title1=todo123,title2=todo321,title3=todo311,feedimage=myimage,user=request.user)
+    if request.method == 'POST' and 'image' in request.FILES:
+        myimage = request.FILES['image']
+        name = request.POST.get("todo")
+        price = request.POST.get("date")
+        quantity = request.POST.get("quantity")
+        model = request.POST.get("model")  # Make sure 'model' is being captured
+
+        # Ensure the 'model' field is not empty before saving
+        if not model:
+            messages.error(request, "Model field cannot be empty.")
+            return redirect('gallery')
+
+        obj = Gallery(
+            name=name,
+            model=model,
+            price=price,
+            quantity=quantity,
+            feedimage=myimage,
+            user=request.user
+        )
         obj.save()
-        data=Gallery.objects.all()
+
+        data = Gallery.objects.all()
         return redirect('adminindex')
-    
+
     gallery_images = Gallery.objects.all()
     return render(request, "galleryupload.html")
+
 
 def usersignup(request):
     if request.POST:
@@ -90,7 +103,8 @@ def adminindex(request):
 
 
 def firstpage(request): 
-    return render(request, "userindex.html")
+    gallery_images=Gallery.objects.all()
+    return render(request, "userindex.html",{"gallery_images":gallery_images})
 
 
 
@@ -146,9 +160,9 @@ def edit_g(request, pk):
         edit3 = request.POST.get('course')
 
 
-        gallery_item.title1 = edit1
-        gallery_item.title2 = edit2
-        gallery_item.title3 = edit3
+        gallery_item.name= edit1
+        gallery_item.model= edit2
+        gallery_item.price= edit3
 
         if 'image' in request.FILES:
             gallery_item.feedimage = request.FILES['image']
@@ -214,31 +228,8 @@ def products(request,id):
     gallery_images =Gallery.objects.filter(pk=id)
     return render(request,'products.html',{"gallery_images": gallery_images})
 
-def cview(request):
-    if request.user.is_authenticated:
-        citems = Cart.objects.filter(user=request.user)
-        cart_item_count = citems.count()  # Get the count of items in the cart
-        return render(request, 'cart.html', {"citems": citems, "cart_item_count": cart_item_count})
-    else:
-        return redirect('loginuser')
 
 
-def addtocart(request, id):
-    if request.user.is_authenticated:
-        product = Gallery.objects.get(id=id)
-        citems, created = Cart.objects.get_or_create(
-            user=request.user,
-            product=product
-        )
-        
-        if created:
-            print(f"Cart Item Added: {product.title1}")
-        else:
-            print(f"Cart Item already in cart: {product.title1}")
-        
-        return redirect('cview') 
-    else:
-        return redirect('loginuser') 
 
 def about_us(request):
     return render(request,'aboutus.html')

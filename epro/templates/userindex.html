@@ -66,17 +66,18 @@
     </div>
     <div class="gallery-grid">
         {% for i in gallery_images %}
-            <div>
-                <a href="{% url 'products' i.id %}">
+        <div>
+            <a href="{% url 'products' i.id %}">
                 <img src="{{ i.feedimage.url }}" alt="Gallery Image" width="300"><br>
-                <span>{{ i.title1 }}</span><br>
-                <span>{{ i.title2 }}</span><br>
-                <span>{{ i.title3 }}</span>
-                <a href="{% url 'addtocart' i.id %}">
-                    <button class="add-to-cart">Add to Cart</button>
-                </a>
-                
-            </div></a>
+                <span>{{ i.name }}</span><br>
+                <span>{{ i.model }}</span><br>
+                <span>{{ i.price}}</span>
+            </a>
+            <a href="{% url 'addtocart' i.id %}">
+                <button class="add-to-cart">Add to Cart</button>
+            </a>
+        </div>
+        
         {% endfor %}
     </div>
 </div>   

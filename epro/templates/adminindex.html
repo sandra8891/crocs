@@ -37,9 +37,10 @@
         {% for i in gallery_images %}
         <div>
             <img src="{{ i.feedimage.url }}" alt="Gallery Image" width="300">
-            <span>{{ i.title1 }}</span>
-            <span>{{ i.title2 }}</span>
-            <span>{{ i.title3 }}</span>
+            <span>{{ i.name}}</span>
+            <span>{{ i.model}}</span>
+            <span>{{ i.price }}</span>
+            <span>{{ i.quantity }}</span>
             <div class="button-group">
                 <a href="{% url 'edit_g' pk=i.id %}"><button class="edit-button">Edit</button></a>  
                 <a href="{% url 'deletion' i.id %}"><button class="delete-button">Delete</button></a>

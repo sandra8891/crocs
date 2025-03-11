@@ -14,13 +14,11 @@
         <form action="{% url 'gallery' %}" method="post" enctype="multipart/form-data">
          {% csrf_token %}
          <label for="image">Upload Image:</label>
-         <input type="file" name="image" id="image" required>
-         company
-         <input type="text" name="todo" class="ww"><br><br>
-         price
-         <input type="text" name="date" class="www"><br><br>
-         delivary type
-         <input type="text" name="course" class="ww"><br><br>
+         <input type="text" name="model" placeholder="Model" required>
+         <input type="text" name="todo" placeholder="Name" required>
+         <input type="text" name="date" placeholder="Price" required>
+         <input type="text" name="quantity" placeholder="Quantity" required>
+         <input type="file" name="image" required>
          <button type="submit">Submit</button>
          
      </form>
@@ -33,9 +31,9 @@
         {% else %}
             <p>No image for this gallery item</p>
         {% endif %}
-        <span>{{ i.title1 }}</span>
-        <span>{{ i.title2 }}</span>
-        <span>{{ i.title3 }}</span>
+        <span>{{ i.name }}</span>
+        <span>{{ i.model}}</span>
+        <span>{{ i.price}}</span>
     
 {% empty %}
         <p>No images uploaded yet.</p>

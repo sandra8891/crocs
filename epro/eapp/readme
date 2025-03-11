@@ -1,0 +1,30 @@
+def cview(request):
+    if request.user.is_authenticated:
+        # Fetch gallery images for the user
+        gallery_images = Gallery.objects.all()  # Fetch all gallery images
+        
+        # Count the items in the user's cart
+        citems = Cart.objects.filter(user=request.user)
+        cart_item_count = citems.count()  # Get the count of items in the cart
+
+        return render(request, 'userindex.html', {"gallery_images": gallery_images, "cart_item_count": cart_item_count})
+
+    else:
+        return redirect('loginuser')  # Redirect to login if not authenticated
+
+
+
+def addtocart(request, id):
+    if request.user.is_authenticated:
+        product = Gallery.objects.get(id=id)
+        citems, created = Cart.objects.get_or_create(
+            user=request.user,
+            product=product
+        )
+        if created:
+            print(f"Cart Item Added: {product.name}")
+        else:
+            print(f"Cart Item already in cart: {product.name}")
+        return redirect('cview') 
+    else:
+        return redirect('loginuser')
