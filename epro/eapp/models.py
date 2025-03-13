@@ -4,7 +4,7 @@ from decimal import Decimal
 
 class Gallery(models.Model):
     name = models.CharField(max_length=255)
-    model = models.CharField(max_length=255)  # Required field
+    model = models.CharField(max_length=255) 
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     feedimage = models.ImageField(upload_to='gallery_images/')

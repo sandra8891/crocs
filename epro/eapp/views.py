@@ -20,9 +20,9 @@ def gallery(request):
         name = request.POST.get("todo")
         price = request.POST.get("date")
         quantity = request.POST.get("quantity")
-        model = request.POST.get("model")  # Make sure 'model' is being captured
+        model = request.POST.get("model") 
 
-        # Ensure the 'model' field is not empty before saving
+        
         if not model:
             messages.error(request, "Model field cannot be empty.")
             return redirect('gallery')
