@@ -248,3 +248,63 @@ userindex.html
 {% else %}
     <p>No products found.</p>
 {% endif %}
+
+
+
+__________________________________________________________________________________________________________________________________
+
+
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Product, CartItem
+
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    size = request.POST.get('size')  # Get the selected size from the form
+    if size:
+        # Check if the product with the selected size already exists in the cart
+        cart_item, created = CartItem.objects.get_or_create(
+            user=request.user,
+            product=product,
+            size=size,
+            defaults={'quantity': 1}
+        )
+        if not created:
+            # If the item already exists in the cart, increment the quantity
+            cart_item.quantity += 1
+            cart_item.save()
+
+    return redirect('cart_view')
+
+
+from django.db import models
+from django.contrib.auth.models import User
+from .models import Product
+
+class CartItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    size = models.CharField(max_length=10)  # Store size as a string (e.g., '5', '6', etc.)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.product.name} ({self.size}) - Quantity: {self.quantity}"
+
+    # Optional: You can add additional logic for total price calculation
+    def total_price(self):
+        return self.quantity * self.product.price
+
+        
+
+
+<div class="cart-item">
+    {% for item in cart_items %}
+        <div class="cart-product">
+            <p>{{ item.product.name }}</p>
+            <p>Size: {{ item.size }}</p>
+            <p>Quantity: {{ item.quantity }}</p>
+            <p>Price: {{ item.total_price }}</p>
+        </div>
+    {% endfor %}
+</div>

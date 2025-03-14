@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Display | Chempakam</title>
+    <title>Product Display | crocs</title>
     <link rel="stylesheet" href="{% static 'css/products.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
@@ -79,9 +79,12 @@
                     
                     <p><strong>Height:</strong> 1.9 inches (4.7 cm)</p><br><br>
 
-                    <a href="{% url 'addtocart' i.id %}">
-                        <button class="add-to-cart">Add to Cart</button>
-                    </a>
+                    {% if i.id in cart_product_ids %}
+                    <a href="{% url 'cart_view' %}"><button>Go to Cart</button></a>
+                {% else %}
+                    <a href="{% url 'add_to_cart' i.id %}"><button>Add to Cart</button></a>
+                {% endif %}
+            
                     
                 </div>
                 <div class="product-image">

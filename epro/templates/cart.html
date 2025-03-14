@@ -56,8 +56,10 @@
         </div>
         
     <h2 class="cart-title">Your Cart</h2>
+    {% if cart_items %}
     <div class="gallery-grid">
-        {% for item in citems %}
+        {% for item in cart_items %}
+
             <div class="product-item">
                 <div class="product-details">
                     <p class="product-title">{{ item.product.name }}</p><br>
@@ -75,6 +77,15 @@
                     
                     <p><strong>Height:</strong> 1.9 inches (4.7 cm)</p><br><br>
 
+                    <div class="quantity-actions">
+                        <a href="{% url 'increment_cart' item.id %}"><button>+</button></a>
+                        <a href="{% url 'decrement_cart' item.id %}"><button>-</button></a>
+                    </div>
+            
+                    <div class="cart-item-actions">
+                      <a href="{% url 'dele' item.id %}"><button class="delete-button">Remove</button></a>
+                    </div>
+
                     
                 </div>
                 <div class="product-image">
@@ -85,6 +96,14 @@
             </div>
         {% endfor %}
     </div>
+    <div class="cart-summary">
+        <p>Total Price: ${{ total_price }}</p>
+        
+      </div>
+    {% else %}
+      <p>Your cart is empty.</p>
+    {% endif %}
+</div>
     <div class="footer">
         <div class="footlogo">
             <ul>

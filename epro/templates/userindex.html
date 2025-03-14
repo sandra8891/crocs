@@ -44,10 +44,11 @@
             <div><i class="bi bi-search"></i></div>
             <div><i class="bi bi-heart"></i></div>
             <div class="cart-icon">
-                <i class="bi bi-cart-fill"></i>
-                <span>{{ cart_item_count }}</span> <!-- Display the cart item count -->
+                <a href="{% url 'cart_view' %}">
+                    <i class="bi bi-cart-fill"></i>
+                    <span>{{ cart_item_count }}</span>
+                </a>
             </div>
-
         </div>
     </div> 
     <div class="belownav">
@@ -73,9 +74,7 @@
                 <span>{{ i.model }}</span><br>
                 <span>{{ i.price}}</span>
             </a>
-            <a href="{% url 'addtocart' i.id %}">
-                <button class="add-to-cart">Add to Cart</button>
-            </a>
+         
         </div>
         
         {% endfor %}

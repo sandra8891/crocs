@@ -6,8 +6,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 import random
 from datetime import datetime, timedelta
-from django.contrib.auth.decorators import login_required
 from .models import *
+from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
 
 
 
@@ -21,25 +22,10 @@ def gallery(request):
         price = request.POST.get("date")
         quantity = request.POST.get("quantity")
         model = request.POST.get("model") 
-
-        
-        if not model:
-            messages.error(request, "Model field cannot be empty.")
-            return redirect('gallery')
-
-        obj = Gallery(
-            name=name,
-            model=model,
-            price=price,
-            quantity=quantity,
-            feedimage=myimage,
-            user=request.user
-        )
+        obj=Gallery(name=name,model=model, quantity=quantity,price=price,feedimage=myimage,user=request.user)
         obj.save()
-
-        data = Gallery.objects.all()
+        data=Gallery.objects.all()
         return redirect('adminindex')
-
     gallery_images = Gallery.objects.all()
     return render(request, "galleryupload.html")
 
@@ -101,10 +87,16 @@ def adminindex(request):
     return render(request, 'adminindex.html', {"gallery_images": gallery_images})
 
 
-
 def firstpage(request): 
-    gallery_images=Gallery.objects.all()
-    return render(request, "userindex.html",{"gallery_images":gallery_images})
+    gallery_images = Gallery.objects.all()  
+    if request.user.is_authenticated:
+        cart_item_count = Cart.objects.filter(user=request.user).count()
+    else:
+        cart_item_count = 0 
+    return render(request, "userindex.html", {
+        "gallery_images": gallery_images,
+        "cart_item_count": cart_item_count
+    })
 
 
 
@@ -179,6 +171,7 @@ def edit_g(request, pk):
 
 
 
+
 def getusername(request):
     if request.POST:
         username = request.POST.get('username')
@@ -227,6 +220,69 @@ def passwordreset(request):
 def products(request,id):
     gallery_images =Gallery.objects.filter(pk=id)
     return render(request,'products.html',{"gallery_images": gallery_images})
+
+
+
+def add_to_cart(request, id):
+    if 'username' in request.session:
+        try:
+            product = Gallery.objects.get(id=id)
+        except Gallery.DoesNotExist:
+        
+            return redirect('product_not_found')  
+    
+        cart_item, created = Cart.objects.get_or_create(
+            user=request.user,
+            product=product,
+            defaults={'quantity': 1}
+        )
+        
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+        
+        return redirect('cart_view')
+    else:
+        return redirect('userlogin')
+
+@login_required
+def increment_cart(request, id):
+    cart_item = get_object_or_404(Cart, pk=id, user=request.user)
+    
+
+    if cart_item.product.stock > cart_item.quantity:
+        cart_item.quantity += 1
+        cart_item.save()
+    else:
+    
+        messages.error(request, "Not enough stock available.")
+    
+    return redirect('cart_view')
+
+@login_required
+def decrement_cart(request, id):
+    cart_item = get_object_or_404(Cart, pk=id, user=request.user)
+    if cart_item.quantity > 1:
+        cart_item.quantity -= 1
+        cart_item.save()
+    else:
+        cart_item.delete()
+    return redirect('cart_view')
+
+@login_required
+def cart_view(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    cart_item_count = cart_items.count()
+    return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price, 'cart_item_count': cart_item_count})
+
+
+@login_required
+def delete_cart(request, id):
+    cart_item = get_object_or_404(Cart, pk=id, user=request.user)
+    cart_item.delete()
+    messages.success(request, "Item removed from cart.")
+    return redirect('cart_view')
 
 
 
