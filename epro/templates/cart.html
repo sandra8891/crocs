@@ -63,8 +63,15 @@
             <div class="product-item">
                 <div class="product-details">
                     <p class="product-title">{{ item.product.name }}</p><br>
-                    <p class="product-description">{{ item.product.model}}</p><br>
-                    <p class="product-price">{{ item.product.price}}</p><br>
+                    <p class="product-description">{{ item.product.price}}</p><br>
+                    <p class="product-price">{{ item.quantity}}</p><br>
+                    <div class="quantity-actions">
+                        <a href="{% url 'increment_cart' item.id %}">
+                            <button>+</button></a>
+                            <a href="{% url 'decrement_cart' item.id %}">
+                                <button>-</button>
+                            </a>
+                    </div><br>
                     
                     <label for="size">Select Shoe Size:</label><br>
                     <select id="size">
@@ -77,10 +84,13 @@
                     
                     <p><strong>Height:</strong> 1.9 inches (4.7 cm)</p><br><br>
 
-                    <div class="quantity-actions">
-                        <a href="{% url 'increment_cart' item.id %}"><button>+</button></a>
-                        <a href="{% url 'decrement_cart' item.id %}"><button>-</button></a>
-                    </div>
+                    <!-- <div class="quantity-actions">
+                        <a href="{% url 'increment_cart' item.id %}">
+                            <button>+</button></a>
+                            <a href="{% url 'decrement_cart' item.id %}">
+                                <button>-</button>
+                            </a>
+                    </div> -->
             
                     <div class="cart-item-actions">
                       <a href="{% url 'dele' item.id %}"><button class="delete-button">Remove</button></a>

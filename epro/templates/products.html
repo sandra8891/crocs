@@ -46,9 +46,11 @@
             <div><i class="bi bi-heart"></i></div>
         
           <div class="cart-icon">
+            <a href="{% url 'cart_view' %}">
                 <i class="bi bi-cart-fill"></i>
-                <span>{{ cart_item_count }}</span> 
-            </div>
+                <span>{{ cart_item_count }}</span>
+            </a>
+        </div>
             
 
         </div>

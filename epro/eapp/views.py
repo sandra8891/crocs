@@ -217,9 +217,17 @@ def passwordreset(request):
     return render(request, "passwordreset.html")
 
 
-def products(request,id):
-    gallery_images =Gallery.objects.filter(pk=id)
-    return render(request,'products.html',{"gallery_images": gallery_images})
+def products(request, id):
+    gallery_images = Gallery.objects.filter(pk=id)
+    if request.user.is_authenticated:
+        cart_item_count = Cart.objects.filter(user=request.user).count()
+    else:
+        cart_item_count = 0 
+    
+    return render(request, 'products.html', {
+        "gallery_images": gallery_images,
+        "cart_item_count": cart_item_count
+    })
 
 
 
@@ -234,30 +242,30 @@ def add_to_cart(request, id):
         cart_item, created = Cart.objects.get_or_create(
             user=request.user,
             product=product,
-            defaults={'quantity': 1}
+        
         )
-        
         if not created:
-            cart_item.quantity += 1
+            if cart_item.product.quantity > cart_item.quantity:
+                cart_item.quantity += 1
+            else:
+                messages.error(request, "out of stock.")
+                return redirect('cart_view')
+        else:
+            cart_item.quantity = 1
             cart_item.save()
-        
-        return redirect('cart_view')
-    else:
-        return redirect('userlogin')
+            return redirect('cart_view')
 
 @login_required
 def increment_cart(request, id):
     cart_item = get_object_or_404(Cart, pk=id, user=request.user)
-    
-
-    if cart_item.product.stock > cart_item.quantity:
+    if cart_item.product.quantity > cart_item.quantity:
         cart_item.quantity += 1
         cart_item.save()
     else:
-    
         messages.error(request, "Not enough stock available.")
-    
+
     return redirect('cart_view')
+
 
 @login_required
 def decrement_cart(request, id):
