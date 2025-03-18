@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Your Wishlist</h1>
+    <div class="wishlist-items">
+        {% for item in wishlist_items %}
+        <div class="wishlist-item">
+            <img src="{{ item.product.feedimage.url }}" alt="{{ item.product.name }}" width="100">
+            <span>{{ item.product.name }}</span><br>
+            <span>{{ item.product.model }}</span><br>
+            <span>{{ item.product.price }}</span>
+            <!-- Link to remove the product from the wishlist -->
+            <a href="{% url 'remove_from_wishlist' item.product.id %}">Remove</a>
+        </div>
+        {% empty %}
+        <p>Your wishlist is empty!</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

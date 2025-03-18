@@ -91,11 +91,15 @@ def firstpage(request):
     gallery_images = Gallery.objects.all()  
     if request.user.is_authenticated:
         cart_item_count = Cart.objects.filter(user=request.user).count()
+        wishlist_item_count = Wishlist.objects.filter(user=request.user).count() 
     else:
         cart_item_count = 0 
+        wishlist_item_count = 0
     return render(request, "userindex.html", {
         "gallery_images": gallery_images,
-        "cart_item_count": cart_item_count
+        "cart_item_count": cart_item_count,
+        "wishlist_item_count": wishlist_item_count,
+        
     })
 
 
@@ -293,7 +297,61 @@ def delete_cart(request, id):
     return redirect('cart_view')
 
 
+@login_required
+def add_to_wishlist(request, id):
+    # Get the product from the Gallery model
+    product = get_object_or_404(Gallery, id=id)
+    
+    # Check if the product is already in the user's wishlist
+    if not Wishlist.objects.filter(user=request.user, product=product).exists():
+        # Add the product to the wishlist
+        wishlist_item = Wishlist(user=request.user, product=product)
+        wishlist_item.save()
+        messages.success(request, f'{product.name} added to your wishlist!')
+    else:
+        messages.info(request, f'{product.name} is already in your wishlist.')
+    
+    return redirect('wishlist_view')
 
+@login_required
+def wishlist_view(request):
+    # Get all the products in the user's wishlist
+    wishlist_items = Wishlist.objects.filter(user=request.user)
+    
+    return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+
+@login_required
+def remove_from_wishlist(request, id):
+    # Get the product object
+    product = get_object_or_404(Gallery, id=id)
+    
+    # Find the wishlist entry for the user and the product
+    wishlist_item = Wishlist.objects.filter(user=request.user, product=product)
+    
+    # If it exists, delete the item
+    if wishlist_item.exists():
+        wishlist_item.delete()
+        messages.success(request, f'{product.name} has been removed from your wishlist.')
+    else:
+        messages.info(request, f'{product.name} is not in your wishlist.')
+    
+    # Redirect back to the wishlist view page
+    return redirect('wishlist_view')
+
+
+def search_results(request):
+    query = request.GET.get('q')  # Get the search query from the GET parameters
+    results = None  # Default to None if there's no query
+    
+    if query:
+        # Filter Gallery by name or model using the query, case insensitive
+        results = Gallery.objects.filter(
+            name__icontains=query
+        ) | Gallery.objects.filter(
+            model__icontains=query
+        )
+    
+    return render(request, 'search_results.html', {'results': results, 'query': query})
 
 def about_us(request):
     return render(request,'aboutus.html')

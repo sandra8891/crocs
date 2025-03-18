@@ -25,7 +25,10 @@ urlpatterns = [
     path('edit/<int:pk>/', views.edit_g, name='edit_g'),
     path('cart/increment/<int:id>/', views.increment_cart, name='increment_cart'),
     path('cart/decrement/<int:id>/', views.decrement_cart, name='decrement_cart'),
-
+    path('remove-from-wishlist/<int:id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    path('add-to-wishlist/<int:id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('wishlist/', views.wishlist_view, name='wishlist_view'),
+    path('search/', views.search_results, name='search_results'), 
    
     
 ]
