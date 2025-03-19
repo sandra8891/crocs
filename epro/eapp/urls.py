@@ -6,7 +6,8 @@ from .import views
 
 urlpatterns = [
     path('login', views.loginuser, name='loginuser'),
-    path('adminindex', views.adminindex, name='adminindex'),  
+    path('adminindex', views.adminindex, name='adminindex'), 
+    path('users/', views.admin_users, name='admin_users'),
     path('usersignup', views.usersignup, name='usersignup'),
     path('forgotpassword',views.getusername,name='forgotpassword'),
     path('verifyotp',views.verifyotp,name='verifyotp'),
@@ -29,6 +30,8 @@ urlpatterns = [
     path('add-to-wishlist/<int:id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('wishlist/', views.wishlist_view, name='wishlist_view'),
     path('search/', views.search_results, name='search_results'), 
+    path('myprofile/', views.myprofile, name='myprofile'),
+
    
     
 ]

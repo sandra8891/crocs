@@ -87,6 +87,15 @@ def adminindex(request):
     return render(request, 'adminindex.html', {"gallery_images": gallery_images})
 
 
+def admin_users(request):
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        # Redirect non-admin users or unauthenticated users
+        return redirect('loginuser')
+
+    users = User.objects.all()  # Fetch all users
+    return render(request, 'admin_users.html', {'users': users})
+
+
 def firstpage(request): 
     gallery_images = Gallery.objects.all()  
     if request.user.is_authenticated:
@@ -352,6 +361,55 @@ def search_results(request):
         )
     
     return render(request, 'search_results.html', {'results': results, 'query': query})
+
+
+@login_required
+def myprofile(request):
+    # If the user submits the form to update profile
+    if request.method == "POST":
+        new_email = request.POST.get('email')
+        new_username = request.POST.get('username')
+        new_password = request.POST.get('password')
+        confirm_password = request.POST.get('confpassword')
+
+        user = request.user
+
+        # Check for changes in user information
+        if new_email != user.email:
+            if User.objects.filter(email=new_email).exists():
+                messages.error(request, "This email is already taken.")
+                return redirect('myprofile')
+            user.email = new_email
+
+        if new_username != user.username:
+            if User.objects.filter(username=new_username).exists():
+                messages.error(request, "This username is already taken.")
+                return redirect('myprofile')
+            user.username = new_username
+
+        if new_password and new_password == confirm_password:
+            user.set_password(new_password)
+        elif new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('myprofile')
+
+        # Save changes
+        user.save()
+
+        # Re-authenticate the user after changing password
+        if new_password:
+            messages.success(request, "Your profile has been updated. Please log in again.")
+            logout(request)
+            return redirect('loginuser')
+
+        messages.success(request, "Your profile has been updated.")
+        return redirect('myprofile')  # Redirect to the same page to see the changes
+
+    # Display the user's current profile
+    return render(request, 'myprofile.html')
+
+
+
 
 def about_us(request):
     return render(request,'aboutus.html')
