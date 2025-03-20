@@ -230,6 +230,9 @@ def passwordreset(request):
     return render(request, "passwordreset.html")
 
 
+
+
+
 def products(request, id):
     gallery_images = Gallery.objects.filter(pk=id)
     if request.user.is_authenticated:
@@ -371,6 +374,9 @@ def myprofile(request):
         new_username = request.POST.get('username')
         new_password = request.POST.get('password')
         confirm_password = request.POST.get('confpassword')
+        new_address = request.POST.get('address')
+        new_place = request.POST.get('place')
+        new_phone_number = request.POST.get('phone_number')
 
         user = request.user
 
@@ -396,6 +402,13 @@ def myprofile(request):
         # Save changes
         user.save()
 
+        # Update or create the user profile
+        user_profile, created = UserProfile.objects.get_or_create(user=user)
+        user_profile.address = new_address
+        user_profile.place = new_place
+        user_profile.phone_number = new_phone_number
+        user_profile.save()
+
         # Re-authenticate the user after changing password
         if new_password:
             messages.success(request, "Your profile has been updated. Please log in again.")
@@ -406,7 +419,9 @@ def myprofile(request):
         return redirect('myprofile')  # Redirect to the same page to see the changes
 
     # Display the user's current profile
-    return render(request, 'myprofile.html')
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    return render(request, 'myprofile.html', {'user_profile': user_profile})
+
 
 
 
