@@ -12,68 +12,52 @@ body {
 
 /* Top Navigation */
 .topnav {
-    background-color: black;
+    background-color: green;
     padding: 10px 20px;
-     font-size: 1.2rem;
+    font-size: 1.2rem;
     color: white;
     border-bottom: 1px solid #000;
-    display: flex; 
-    justify-content: space-between; 
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-  } 
-  
-  .topnav .sign-up-text {
-    text-align: center;
-    flex-grow: 1; /* This ensures the sign-up text takes up remaining space */
-  }
-  
-  /* Account Dropdown container */
-  .topnav .account-dropdown {
+    position: relative;
+}
+
+/* Center the text in the p tag */
+.topnav p {
+    color: white;
+    flex-grow: 1; /* This ensures the <p> tag takes up the available space */
+    text-align: center; /* Center the text */
+    margin: 0; /* Remove any default margins */
+}
+
+/* Account Dropdown container */
+.topnav .account-dropdown {
     position: relative;
     display: inline-block;
     margin-right: 20px; /* Adds space from the right edge */
-  }
-  
+}
 /* Main Navigation Bar */
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color:black;  /* Set to a color matching your logo (Adjust to match logo) */
-    border: none; /* Remove border */
-    padding: 0px 40px;  /* Add padding on the left and right for spacing */
+    background-color: black; /* Set to a color matching your logo */
+    padding: 0px 40px; /* Add padding on the left and right for spacing */
     position: relative;
-}
-
-.belownav {
-    background-color: white;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 1.2rem;
-    color: #000;
-    border-top: 1px solid #000;
+    height: 90px; /* Set the desired height of the navbar */
 }
 
 /* Logo Styling */
 .logo img {
-    width: 150px; /* Adjust logo width to fit the navbar */
-    height: auto; /* Keep the aspect ratio of the logo */
-    margin-left: 0; /* Remove left margin to center logo */
-}
-
-.nav {
-    height: 90px; /* Adjust to match the desired height of the nav bar */
-}
-
-.logo img {
-    height: 100px; /* Adjust the height of the logo to fit well inside the nav bar */
+    height: 100px; /* Adjust the height of the logo to fit well inside the navbar */
     width: auto; /* Let the width auto-adjust based on the height */
 }
 
 /* Left-side navigation links */
 .left {
     display: flex;
-    gap: 25px;
+    gap: 25px; /* Adjust space between links */
     align-items: center;
 }
 
@@ -82,76 +66,94 @@ body {
 }
 
 .left a div {
-    color:white; /* Set color to black for the div inside the link */
+    color: white; /* Set the color to white for the link text */
     font-size: 1rem;
     cursor: pointer;
     padding: 5px 19px;
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
 }
 
-/* Optional: Hover effect */
+/* Hover effect for links */
 .left a div:hover {
-    color: #333; /* Darker color on hover */
+    color: #ff6347; /* Change to a different color on hover, like tomato */
 }
-
-
-
 
 /* Right-side search and social media icons */
 .right {
     display: flex;
     align-items: center;
-    gap: 26px;
+    gap: 20px; /* Adjust space between elements */
 }
 
+/* Search form input field */
+.search-input {
+    padding: 8px 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
 
-.right i {
+/* Search button */
+.right button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.right button i {
+    font-size: 1.5rem; /* Adjust the search icon size */
+    color: #555;
+    transition: color 0.3s ease; /* Smooth transition for the icon color */
+}
+
+/* Hover effect for search icon */
+.right button:hover i {
+    color: #ff6347; /* Change the color of the search icon on hover */
+}
+
+/* Wishlist and Cart icons */
+.right .bi {
     font-size: 1.9rem;
     color: #555;
     cursor: pointer;
     margin-right: 26px;
 }
 
+/* Wishlist icon hover */
+.right .bi-heart-fill:hover,
+.right .bi-cart-fill:hover {
+    color: #ff6347; /* Change color on hover for both wishlist and cart icons */
+}
 
-/* Optional: Add a background image */
-.background-section {
-    background-color: #f0f0f0;  /* Light grey background as a fallback */
-    background-image: url("{% static 'image/newbg.jpg' %}"); /* Background image */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: 380px 0;  /* Add padding for spacing */
-    color: white;  /* Text color */
-    text-align: center; /* Center the text */
-    margin-bottom: 10px;
+/* Optional: For better mobile responsiveness */
+@media (max-width: 768px) {
+    .nav {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        padding: 10px;
+    }
+
+    .left, .right {
+        flex-direction: column;
+        gap: 15px; /* Space between items on small screens */
+    }
+    
+    .left a div {
+        font-size: 1.1rem; /* Increase font size on smaller screens */
+    }
+    
+    .right {
+        gap: 15px;
+    }
 }
 
 
 
-.background-section2 {
-    background-color: #f0f0f0;  /* Light grey background as a fallback */
-    background-image: url("{% static 'image/newbg.jpg' %}"); /* Background image */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: 340px 0;  /* Add padding for spacing */
-    color: white;  /* Text color */
-    text-align: center; /* Center the text */
-    margin-top: 10px;
-}
 
-/* .new-arrivals-container { */
-    /* display: flex; */
-    /* justify-content: center; Centers the content horizontally */
-    /* align-items: center; Centers the content vertically */
-    /* height: 200px; Adjust this height based on your needs */
-    /* background-color: #f8f8f8; Optional: Background color */
-/* } */
 
-/* .new-arrivals-container h1 { */
-    /* font-size: 2rem; Adjust the font size as needed */
-    /* font-weight: bold; Make the text bold */
-    /* text-align: center; Ensures the text is centered within the container */
-/* } */
+
+
+
 
 
 

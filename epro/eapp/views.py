@@ -248,29 +248,32 @@ def products(request, id):
 
 
 def add_to_cart(request, id):
-    if 'username' in request.session:
-        try:
-            product = Gallery.objects.get(id=id)
-        except Gallery.DoesNotExist:
-        
-            return redirect('product_not_found')  
-    
-        cart_item, created = Cart.objects.get_or_create(
-            user=request.user,
-            product=product,
-        
-        )
-        if not created:
-            if cart_item.product.quantity > cart_item.quantity:
-                cart_item.quantity += 1
-            else:
-                messages.error(request, "out of stock.")
-                return redirect('cart_view')
-        else:
-            cart_item.quantity = 1
-            cart_item.save()
-            return redirect('cart_view')
+    if not request.user.is_authenticated:
+        messages.error(request, "You need to be logged in to add items to the cart.")
+        return redirect('loginuser')  
 
+    try:
+        product = Gallery.objects.get(id=id)
+    except Gallery.DoesNotExist:
+        return redirect('product_not_found')  # Handle the case where the product does not exist
+
+    # Create or update the cart item
+    cart_item, created = Cart.objects.get_or_create(
+        user=request.user,
+        product=product,
+    )
+
+    if not created:
+        if cart_item.product.quantity > cart_item.quantity:
+            cart_item.quantity += 1
+        else:
+            messages.error(request, "Out of stock.")
+            return redirect('cart_view')  # Redirect to cart view if out of stock
+    else:
+        cart_item.quantity = 1
+        cart_item.save()
+
+    return redirect('cart_view')  # Redirect to cart view after adding the item
 @login_required
 def increment_cart(request, id):
     cart_item = get_object_or_404(Cart, pk=id, user=request.user)
