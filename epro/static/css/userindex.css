@@ -10,9 +10,10 @@ body {
     background-color: white;
 }
 
-/* Top Navigation */
+
 .topnav {
-    background-color:rgb(216, 14, 216);
+    /* background-color:rgb(209, 7, 209); */
+    background-color: #c187d8;
     padding: 10px 20px;
     font-size: 1.2rem;
     color: white;
@@ -23,41 +24,43 @@ body {
     position: relative;
 }
 
-/* Center the text in the p tag */
+
 .topnav p {
     color: white;
-    flex-grow: 1; /* This ensures the <p> tag takes up the available space */
-    text-align: center; /* Center the text */
-    margin: 0; /* Remove any default margins */
+    flex-grow: 1; 
+    text-align: center; 
+    margin: 0; 
 }
 
-/* Account Dropdown container */
+
 .topnav .account-dropdown {
     position: relative;
     display: inline-block;
-    margin-right: 20px; /* Adds space from the right edge */
+    margin-right: 20px; 
 }
-/* Main Navigation Bar */
+
+
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: black; /* Set to a color matching your logo */
-    padding: 0px 40px; /* Add padding on the left and right for spacing */
+    background-color: black; 
+    padding: 0px 40px; 
     position: relative;
-    height: 90px; /* Set the desired height of the navbar */
+    height: 90px; 
 }
 
-/* Logo Styling */
+
+
 .logo img {
-    height: 100px; /* Adjust the height of the logo to fit well inside the navbar */
-    width: auto; /* Let the width auto-adjust based on the height */
+    height: 100px; 
+    width: auto; 
 }
 
-/* Left-side navigation links */
+
 .left {
     display: flex;
-    gap: 25px; /* Adjust space between links */
+    gap: 25px; 
     align-items: center;
 }
 
@@ -75,7 +78,7 @@ body {
 
 /* Hover effect for links */
 .left a div:hover {
-    color: #ff6347; /* Change to a different color on hover, like tomato */
+    color: rgb(253, 84, 253); /* Change to a different color on hover, like tomato */
 }
 
 /* Right-side search and social media icons */
@@ -109,7 +112,7 @@ body {
 
 /* Hover effect for search icon */
 .right button:hover i {
-    color: #ff6347; /* Change the color of the search icon on hover */
+    color: rgb(217, 33, 217); /* Change the color of the search icon on hover */
 }
 
 /* Wishlist and Cart icons */
@@ -123,7 +126,7 @@ body {
 /* Wishlist icon hover */
 .right .bi-heart-fill:hover,
 .right .bi-cart-fill:hover {
-    color: #ff6347; /* Change color on hover for both wishlist and cart icons */
+    color: rgb(192, 23, 192); /* Change color on hover for both wishlist and cart icons */
 }
 
 /* Optional: For better mobile responsiveness */
@@ -146,6 +149,8 @@ body {
         gap: 15px;
     }
 }
+
+
 
 
 
@@ -195,16 +200,20 @@ body {
 
 .banner-content {
     max-width: 40%;
-    color: #800080;
+    /* color: #800080; */
+    
+
 }
 
 .banner-content h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+    color:purple;
 }
 
 .banner-content h1 span {
     font-weight: bold;
+    color:purple;
 }
 
 .banner-content p {
@@ -213,7 +222,7 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.shop-btn {
+/* .shop-btn {
     display: inline-block;
     padding: 10px 20px;
     background-color: #800080;
@@ -226,7 +235,7 @@ body {
 
 .shop-btn:hover {
     background-color: #660066;
-}
+} */
 
 .banner-image {
     flex: 1;
@@ -234,14 +243,14 @@ body {
 }
 
 .banner-image img {
-    max-width: 100%;
+    max-width: 1000px;
     height: auto;
-    max-height: 600px; /* Adjust based on your image */
+    max-height: 1000px; 
     object-fit: contain;
-    padding-right: 200px;
+    padding-right: px;
 }
 
-.social-icons {
+/* .social-icons {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -260,7 +269,7 @@ body {
 
 .social-icons a img:hover {
     filter: grayscale(0%);
-}
+} */
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -327,6 +336,67 @@ body {
 
 
 
+.gender-collections {
+    padding: 60px 0;
+    background-color: #f9f9f9;
+  }
+  
+  .section-title {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .section-title h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color:#ba6bd9;
+  }
+  
+  .collections-grid {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .collection-card {
+    flex: 1;
+    min-width: 300px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .collection-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .collection-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .card-content {
+    padding: 20px;
+  }
+  
+  .card-content h3 {
+    font-size: 24px;
+    margin-top: 10px;
+    color: #333;
+  }
+  
+
+
+
+  
 
 
 
@@ -339,54 +409,123 @@ body {
 
 
 
-/* Gallery grid layout */
+
+
+ /* New Arrivals Section */
+.section-title {
+    text-align: center;
+    margin: 40px 0;
+}
+
+.section-title h1 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ba6bd9;
+}
+
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Creates a responsive grid */
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
     padding: 20px;
+    max-width: 1200px; /* Added to center the grid like in the screenshot */
+    margin: 0 auto; /* Center the grid */
 }
 
-/* Each individual image box */
-.gallery-grid div {
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.product-item {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 12px;
     text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* For positioning the "New" badge */
 }
 
-/* Style for the images to maintain a fixed height and width */
-.gallery-grid img {
-    width: 100%;  /* Ensure the image takes up the full width of the container */
-    height: 300px; /* Fixed height for all images */
-    object-fit: cover; /* Ensures the image covers the area while maintaining aspect ratio */
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    transform: scale(1.1);
+}
+
+/* New badge */
+.new-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ba6bd9;
+    color: #fff;
+    padding: 5px 10px;
     border-radius: 5px;
+    font-size: 12px;
+    z-index: 1;
 }
 
-/* Styling for image titles */
+/* Style and position the icon container */
+.icon-container {
+    position: absolute;
+    top: 50%;
+    /* right: 1px; */
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Show icons when hovering anywhere on the image-container */
+.image-container:hover .icon-container {
+    opacity: 1;
+}
+
+.icon-container a i {
+    font-size: 22px;
+    color: #555;
+    background: #fff;
+    padding: 8px;
+    border-radius: 50%;
+    transition: color 0.3s, transform 0.2s ease;
+    display: block;
+}
+
+.icon-container a i:hover {
+    color: #a540cd;
+    transform: scale(1.1);
+}
+
 .gallery-grid span {
     display: block;
-    margin-top: 10px;
+    margin-top: 8px;
     font-size: 16px;
+    font-weight: 600;
     color: #333;
+}
+
+/* Style for the price */
+.gallery-grid span.price {
+    color: purple;
     font-weight: bold;
 }
 
-/* Styling for the first image title (if any) */
-.gallery-grid span:first-child {
-    font-size: 18px;
-    margin-top: 15px;
-    font-weight: bold;
-}
 
-/* Ensure that images and text stay centered and responsive */
-.gallery-grid img {
-    max-width: 100%;
-    height: auto;
-    object-fit: cover;
-}
+
+
+
 
 /* Styling for the logout and other links */
 a {
