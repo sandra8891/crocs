@@ -10,25 +10,22 @@
 <body>
 
     <div class="topnav">
-        <p>SIGN UP FOR 15% OFF</p>
+        <p>Easy walkers</p>
     </div>
 
     <div class="nav">
         <div class="logo">
-            <img  src="{% static 'image/crocslogo.svg' %}" alt="crocs">
+            <img  src="" alt="crocs">
         </div>
         <div class="left">
-            <div>SHOP NOW</div>
-            <div>REVIEWS</div>
-            <div>ABOUT US</div>
-            <div>CONTACT US</div>
+
             <a href="{% url 'admin_users' %}"><button>View Registered Users</button></a>
             <a href="{% url 'gallery'%}"><button>Upload a Product</button></a> 
             <a href="{% url 'adminlogout' %}"><button>Logout</button></a>
         </div>
         <div class="right">
-            <div><input type="search" placeholder="Product Code"></div>
-            <div><i class="bi bi-search"></i></div>
+            <!-- <div><input type="search" placeholder="Product Code"></div>     -->
+            <!-- <div><i class="bi bi-search"></i></div> -->
             <div><i class="bi bi-facebook"></i></div>
         </div>
     </div> 
