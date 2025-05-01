@@ -6,110 +6,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Display | crocs</title>
     <link rel="stylesheet" href="{% static 'css/products.css' %}">
-    <!-- <link rel="stylesheet" href="{%static 'css/userindex.css' %}"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
     <div class="topnav">
         <p>uglyness make everything beautiful</p>
-          <div class="account-dropdown">
+        <div class="account-dropdown">
             <button class="account-button">
                 <i class="bi bi-person"></i> MY ACCOUNT
             </button>
             <div class="account-menu">
                 {% if user.is_authenticated %}
                     <a href="{% url 'myprofile' %}">MY PROFILE</a>
-                    <a href="#">WHISHLIST</a>
-                    <a href="#">ORDER STATUS</a>
-                    <a href="#">RETURNS</a>
+                    <!-- <a href="{% url 'wishlist_view' %}">WISHLIST</a> -->
+                    <!-- <a href="#">ORDER STATUS</a> -->
+                    <!-- <a href="#">RETURNS</a> -->
                     <a href="{% url 'logoutuser' %}">LOGOUT</a>
-                    {% else %}
+                {% else %}
                     <a href="{% url 'loginuser' %}">SIGN IN / REGISTER</a>
                 {% endif %}
             </div>
         </div>
-        
+    </div>
+
+    <div class="nav">
+        <div class="logo">
+            <img src="{% static 'image/.jpeg' %}" alt="crocs">
         </div>
-      
-        
-        
-        <div class="nav">
-            <div class="logo">
-                <img  src="" alt="crocs">
+        <div class="left">
+            <a href="#"><div>WOMEN</div></a>
+            <a href="#"><div>MEN</div></a>
+            <a href="#"><div>NEW ARRIVALS</div></a>
+            <a href="{% url 'about_us' %}"><div>ABOUT US</div></a>
+        </div>
+        <div class="right">
+            <form action="{% url 'search_results' %}" method="get">
+                <input type="text" name="q" placeholder="Search " class="search-input">
+                <button type="submit"><i class="bi bi-search"></i></button>
+            </form>
+            <div><a href="{% url 'wishlist_view' %}">
+                <i class="bi bi-heart-fill"></i>
+                <span>{{ wishlist_item_count }}</span>
+            </a></div>
+            <div class="cart-icon">
+                <a href="{% url 'cart_view' %}">
+                    <i class="bi bi-cart-fill"></i>
+                    <span>{{ cart_item_count }}</span>
+                </a>
             </div>
-            <div class="left">
-                <a href="#"><div>WOMEN</div></a>
-                <a href="#"><div>MEN</div></a>
-                <a href="#"><div>NEW ARRIVALS</div></a>
-                <a href="{% url 'about_us' %}"><div>ABOUT US</div></a>
-                
-           
-           
-            </div>
-                <div class="right">
-                    <form action="{% url 'search_results' %}" method="get">
-                        <input type="text" name="q" placeholder="Search " class="search-input">
-                        <button type="submit"><i class="bi bi-search"></i></button>
-                    </form>
-                    <div><a href="{% url 'wishlist_view' %}">
-                        <i class="bi bi-heart-fill"></i>
-                        <span>{{ wishlist_item_count }}</span>
-                    </a></div>
-                    <div class="cart-icon">
-                        <a href="{% url 'cart_view' %}">
-                            <i class="bi bi-cart-fill"></i>
-                            <span>{{ cart_item_count }}</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-           
-    
+        </div>
+    </div>
+
     <div class="gallery-grid">
         {% for i in gallery_images %}
             <div class="product-item">
-                <div class="product-details">
-                    <p class="product-title">{{ i.name }}</p><br>
-                    <p class="product-description">{{ i.model }}</p><br>
-                    <p class="product-price">{{ i.price}}</p><br>
-
-                    
-                    <label for="size">Select Shoe Size:</label><br>
-                    <select id="size">
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                    </select><br>
-
-                    
-                    <p><strong>Height:</strong> 1.9 inches (4.7 cm)</p><br><br>
-
-                    {% if i.id in cart_product_ids %}
-                    <a href="{% url 'cart_view' %}"><button>Go to Cart</button></a>
-                {% else %}
-                    <a href="{% url 'add_to_cart' i.id %}"><button>Add to Cart</button></a>
-                {% endif %}
-            
-                    
+                <!-- Thumbnail Images -->
+                <div class="product-image-thumbnails">
+                    {% if i.feedimage1 %}
+                        <img src="{{ i.feedimage1.url }}" alt="Image 1" class="thumbnail">
+                    {% endif %}
+                    {% if i.feedimage2 %}
+                        <img src="{{ i.feedimage2.url }}" alt="Image 2" class="thumbnail">
+                    {% endif %}
+                    {% if i.feedimage3 %}
+                        <img src="{{ i.feedimage3.url }}" alt="Image 3" class="thumbnail">
+                    {% endif %}
+                    {% if i.feedimage4 %}
+                        <img src="{{ i.feedimage4.url }}" alt="Image 4" class="thumbnail">
+                    {% endif %}
+                    {% if i.feedimage5 %}
+                        <img src="{{ i.feedimage5.url }}" alt="Image 5" class="thumbnail">
+                    {% endif %}
                 </div>
-                <div class="product-image">
-                    <!-- <a href="{% url 'products' i.id %}"> -->
-                        <img src="{{ i.feedimage.url }}" alt="Gallery Image">
-                    <!-- </a> -->
+                <!-- Main Image -->
+                <div class="product-image-main">
+                    {% if i.feedimage1 %}
+                        <img src="{{ i.feedimage1.url }}" alt="Main Image" class="main-image">
+                    {% else %}
+                        <img src="{% static 'images/default.jpg' %}" alt="Default Image" class="main-image">
+                    {% endif %}
+                </div>
+                <!-- Product Details -->
+                <div class="product-details">
+                    <p class="product-title">{{ i.name }}</p>
+                    <p class="product-description">{{ i.description|default:"No description available" }}</p>
+                    <p class="product-price">${{ i.price }}</p>
+                    {% if i.id in cart_product_ids %}
+                        <a href="{% url 'cart_view' %}"><button>Go to Cart</button></a>
+                    {% else %}
+                        <form action="{% url 'add_to_cart' i.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
     </div>
 
-    
     <div class="footer">
         <div class="footlogo">
             <ul>
-                <li>  <img  src="{% static 'image/crocslogo.svg' %}" alt="crocs"></li>
+                <li><img src="{% static 'image/crocslogo.svg' %}" alt="crocs"></li>
                 <li><i class="bi bi-facebook"></i></li>
                 <li>All rights reserved by Chempakam, Cochin, India</li>
             </ul>
@@ -137,12 +136,26 @@
         <div class="foot2">
             <ul>
                 <li><h4>CONTACT US</h4></li>
-                <li><i class="bi bi-geo-alt"></i>, Ernakulam, Kerala</li>
-                <li><i class="bi bi-telephone"></i>+91-86065 70657</li>
-                <li><i class="bi bi-clock"></i>Mon - Sat / 9:00AM - 6:00PM</li>
+                <li><i class="bi bi-geo-alt"></i> Ernakulam, Kerala</li>
+                <li><i class="bi bi-telephone"></i> +91-86065 70657</li>
+                <li><i class="bi bi-clock"></i> Mon - Sat / 9:00 AM - 6:00 PM</li>
             </ul>
         </div>
     </div>
+
+    <!-- JavaScript for Thumbnail Interaction -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const mainImage = document.querySelector('.main-image');
+
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function () {
+                    mainImage.src = this.src;
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>

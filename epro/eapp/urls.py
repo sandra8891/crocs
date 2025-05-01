@@ -31,6 +31,8 @@ urlpatterns = [
     path('wishlist/', views.wishlist_view, name='wishlist_view'),
     path('search/', views.search_results, name='search_results'), 
     path('myprofile/', views.myprofile, name='myprofile'),
+    path('new-arrivals/', views.new_arrivals_page, name='new_arrivals_page')
+
 
    
     

@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/new.css' %}">
+    <title>new arrivals</title>
+</head>
+<body>
+    <!-- templates/new_arrivals.html (or whatever the template is named) -->
+
+<div class="section-title">
+    <h1>All New Arrivals</h1>
+</div>
+<div class="gallery-grid">
+    {% for i in gallery_images %}
+        <div class="product-item">
+            <div class="image-container">
+                <a href="{% url 'products' i.id %}">
+                    <img src="{{ i.feedimage1.url|default:'/static/images/default.jpg' }}" alt="{{ i.name }}" width="300">
+                </a>
+                <div class="icon-container">
+                    <a href="{% url 'add_to_wishlist' i.id %}"><i class="bi bi-heart"></i></a>
+                    <a href="{% url 'add_to_cart' i.id %}"><i class="bi bi-cart-fill"></i></a>
+                </div>
+            </div>
+            <span>{{ i.name }}</span>
+            <span>{{ i.model }}</span>
+            <span class="price">${{ i.price }}</span><br>
+        </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

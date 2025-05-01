@@ -5,41 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/galleryupload.css' %}">
-    <title>gallery upload</title>
+    <title>Upload Product</title>
 </head>
 <body>
-    <body>
-        <h1>welcome</h1>
-     
-        <form action="{% url 'gallery' %}" method="post" enctype="multipart/form-data">
-         {% csrf_token %}
-         <label for="image">Upload Image:</label>
-         <input type="text" name="model" placeholder="Model" required>
-         <input type="text" name="todo" placeholder="Name" required>
-         <input type="text" name="date" placeholder="Price" required>
-         <input type="text" name="quantity" placeholder="Quantity" required>
-         <input type="file" name="image" required>
-         <button type="submit">Submit</button>
-         
-     </form>
-     
-        {% for i in gallery_images %}
-
-        {% if i.feedimage %}
-            <img src="{{ i.feedimage.url }}" alt="Gallery Image" width="300">
-            
-        {% else %}
-            <p>No image for this gallery item</p>
-        {% endif %}
-        <span>{{ i.name }}</span>
-        <span>{{ i.model}}</span>
-        <span>{{ i.price}}</span>
-    
-{% empty %}
-        <p>No images uploaded yet.</p>
-{% endfor %}
-
-     
-        <a href="{% url 'adminlogout' %}">logout</a>
+    <h2>Upload a New Product</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Name:</label><input type="text" name="todo" required><br>
+        <label>Model:</label><input type="text" name="model" required><br>
+        <label>Price:</label><input type="number" step="0.01" name="date" required><br>
+        <label>Quantity:</label><input type="number" name="quantity" required><br>
+        <label>Description:</label><textarea name="description"></textarea><br>
+        <label>Image 1:</label><input type="file" name="feedimage1"><br>
+        <label>Image 2:</label><input type="file" name="feedimage2"><br>
+        <label>Image 3:</label><input type="file" name="feedimage3"><br>
+        <label>Image 4:</label><input type="file" name="feedimage4"><br>
+        <label>Image 5:</label><input type="file" name="feedimage5"><br>
+        <button type="submit">Upload</button>
+    </form>
+    <a href="{% url 'adminindex' %}">Back to Admin Index</a>
 </body>
 </html>

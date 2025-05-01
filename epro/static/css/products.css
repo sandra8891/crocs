@@ -12,63 +12,96 @@ body {
     color: #333;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;  /* Ensures the page takes the full height of the viewport */
+    min-height: 100vh; /* Ensures the page takes the full height of the viewport */
 }
 
-/* Top Navigation */
+/* Top Navigation Bar */
 .topnav {
-    background-color: black;
-    padding: 10px 20px; /* Add padding to the sides for spacing */
-    font-size: 1.2rem;
-    color: white;
-    border-bottom: 1px solid #000;
+    background-color: #000;
+    padding: 10px 20px;
     display: flex;
-    justify-content: space-between; /* Space between items */
+    justify-content: space-between;
     align-items: center;
-  }
-  
-  .topnav .sign-up-text {
+    color: #fff;
+    border-bottom: 1px solid #000;
+}
+
+.topnav p {
+    font-size: 14px;
+    flex-grow: 1;
     text-align: center;
-    flex-grow: 1; /* This ensures the sign-up text takes up remaining space */
-  }
-  
-  /* Account Dropdown container */
-  .topnav .account-dropdown {
+}
+
+.account-dropdown {
     position: relative;
-    display: inline-block;
-    margin-right: 20px; /* Adds space from the right edge */
-  }
+    margin-right: 20px;
+}
 
+.account-button {
+    background: none;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 
-  /* Main Navigation Bar */
+.account-button i {
+    margin-right: 5px;
+}
+
+.account-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    min-width: 178px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.account-dropdown:hover .account-menu {
+    display: block;
+}
+
+.account-menu a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.account-menu a:hover {
+    background-color: #f1f1f1;
+    color: #666;
+}
+
+/* Main Navigation Bar */
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: white;
-    border: 1px solid black; /* Black border around the navigation */
-    padding: 0px;
-    position: relative;
-}
-
-.belownav {
-    background-color: white;
-    text-align: center;
+    background-color: #fff;
+    border: 1px solid #000;
     padding: 10px 0;
-    font-size: 1.2rem;
-    color: #000;
-    border-top: 1px solid #000;
 }
 
-/* Logo Styling */
 .logo img {
     width: 190px;
     height: auto;
     margin-left: 23px;
-
 }
 
-/* Left-side navigation links */
 .left {
     display: flex;
     gap: 25px;
@@ -83,191 +116,180 @@ body {
 
 .left a {
     text-decoration: none;
+    color: #333;
+    font-weight: 500;
 }
 
+.left a:hover {
+    color: #ff4081;
+}
 
-/* Right-side search and social media icons */
 .right {
     display: flex;
     align-items: center;
     gap: 26px;
 }
 
-
-.right i {
-    font-size: 1.9rem;
-    color: #555;
-    cursor: pointer;
-    margin-right: 26px;
-}
-  
-
-/* Dropdown Container */
-.account-dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* The Trigger Button */
-.account-button {
-    background: none;
-    border: groove;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 8px 12px;
+.right form {
     display: flex;
     align-items: center;
-    gap: 5px;
-  }
-  
-  /* The Dropdown Menu (initially hidden) */
-  .account-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    min-width: 178px;
+}
+
+.search-input {
+    padding: 8px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-    max-height: 300px; /* Max height */
-    overflow-y: auto; /* Scroll if the content is too long */
-  }
-  
-  /* Show the menu on hover */
-  .account-dropdown:hover .account-menu {
-    display: block;
-  }
-  
-  /* Dropdown Links */
-  .account-menu a {
-    display: block;
-    padding: 8px 15px; /* Reduced padding to decrease gap */
-    color: black;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+}
+
+.right form button {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-left: none;
+    background-color: #f0f0f0;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+
+.right a {
+    color: #333;
     text-decoration: none;
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and color */
-    border-bottom: 1px solid #333; /* Permanent underline */
-  }
-  
-  /* Hover effect for links */
-  .account-menu a:hover {
-    background-color: #f1f1f1;
-    color: #666; /* Change text color to a lighter shade */
-  }
-  
-  
+    font-size: 1.9rem;
+    position: relative;
+    margin-right: 26px;
+}
+
+.right a span {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff4081;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+}
 
 /* Product Gallery Grid */
 .gallery-grid {
+    max-width: 1200px;
+    margin: 40px auto;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
     gap: 20px;
-    padding: 20px;
-    justify-content: center; /* Centers the items horizontally */
-    align-items: flex-start; /* Aligns the items at the top */
 }
 
 .product-item {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: row; /* Place image and details side by side */
     width: 100%;
-    max-width: 1200px; /* Set a max-width for the product card */
-    padding: 15px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    margin-bottom: 20px; /* Adds space between items */
-    text-align: left; /* Aligns the text to the left */
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
-.product-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+/* Thumbnail Images (Carousel-like) */
+.product-image-thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    width: 15%;
 }
 
-.product-image {
-    flex: 1;
-    padding: 10px;
-    width: 60%; /* Occupy 60% of the card's width */
-}
-
-.product-image img {
+.product-image-thumbnails img {
     width: 100%;
-    height: 100%; /* Let the image fill its container */
-    object-fit: cover; /* Ensures the image covers the area */
-    border-radius: 8px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border 0.3s ease;
 }
 
+.product-image-thumbnails img:hover {
+    border: 2px solid #ff4081;
+}
+
+/* Main Product Image */
+.product-image-main {
+    width: 40%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image-main img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 3px solid;
+    border-image: linear-gradient(45deg, #ff4081, #8e24aa) 1;
+}
+
+/* Product Details */
 .product-details {
-    flex: 1;
+    width: 45%;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 40%; /* Occupy 40% of the card's width */
+    justify-content: center;
 }
 
 .product-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+    font-size: 24px;
     font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
 }
 
 .product-description {
-    color: #777;
-    margin-bottom: 10px;
-    font-size: 1rem;
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
 
 .product-price {
-    color: black;
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-}
-
-.product-details label {
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 5px;
+    color: #ff4081;
+    margin-bottom: 20px;
 }
 
-#size {
-    padding: 5px;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.product-details p {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
 }
 
-.add-to-cart {
-    background-color: black;
-    color: white;
+.product-details button {
+    background-color: #ff4081;
+    color: #fff;
     border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    cursor: pointer;
+    padding: 10px 20px;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.add-to-cart:hover {
-    background-color: #c40000;
+.product-details button:hover {
+    background-color: #e91e63;
 }
-
 
 /* Footer Section */
 .footer {
     background-color: #000;
-    color: white;
+    color: #fff;
     display: flex;
     justify-content: space-around;
     padding: 30px 0;
     text-align: center;
     width: 100%;
-    margin-top: auto; /* Push the footer to the bottom */
+    margin-top: auto;
 }
 
 .footlogo ul, .foot1 ul, .foot2 ul {
@@ -295,6 +317,7 @@ body {
 .foot1 h4, .foot2 h4 {
     font-size: 1.1rem;
     margin-bottom: 15px;
+    color: #ff4081;
 }
 
 .foot1 li, .foot2 li {
@@ -326,7 +349,22 @@ body {
         align-items: center;
     }
 
-    .product-image {
-        margin-bottom: 20px;
+    .product-image-thumbnails, .product-image-main, .product-details {
+        width: 100%;
+    }
+
+    .product-image-main {
+        padding: 10px;
+    }
+
+    .product-image-thumbnails {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .product-image-thumbnails img {
+        width: 60px;
+        height: 60px;
     }
 }

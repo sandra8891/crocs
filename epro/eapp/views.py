@@ -16,17 +16,44 @@ from django.contrib.auth.decorators import login_required
 
 
 def gallery(request):
-    if request.method == 'POST' and 'image' in request.FILES:
-        myimage = request.FILES['image']
+    if request.method == 'POST':
+        myimage1 = request.FILES.get('feedimage1')
+        myimage2 = request.FILES.get('feedimage2')
+        myimage3 = request.FILES.get('feedimage3')
+        myimage4 = request.FILES.get('feedimage4')
+        myimage5 = request.FILES.get('feedimage5')
         name = request.POST.get("todo")
         price = request.POST.get("date")
         quantity = request.POST.get("quantity")
-        model = request.POST.get("model") 
-        obj=Gallery(name=name,model=model, quantity=quantity,price=price,feedimage=myimage,user=request.user)
-        obj.save()
-        data=Gallery.objects.all()
-        return redirect('adminindex')
-    gallery_images = Gallery.objects.all()
+        model = request.POST.get("model")
+        description = request.POST.get("description")
+
+        # Basic validation
+        if not name or not price or not quantity or not model:
+            messages.error(request, "Please fill in all required fields.")
+            return render(request, "galleryupload.html")
+
+        try:
+            obj = Gallery(
+                name=name,
+                model=model,
+                quantity=quantity,
+                price=price,
+                feedimage1=myimage1,
+                feedimage2=myimage2,
+                feedimage3=myimage3,
+                feedimage4=myimage4,
+                feedimage5=myimage5,
+                description=description,
+                user=request.user
+            )
+            obj.save()
+            messages.success(request, "Product uploaded successfully!")
+            return redirect('adminindex')
+        except Exception as e:
+            messages.error(request, f"Error uploading product: {str(e)}")
+            return render(request, "galleryupload.html")
+
     return render(request, "galleryupload.html")
 
 
@@ -82,18 +109,20 @@ def adminindex(request):
         messages.error(request, "You need to be logged in to access this page.")
         return redirect('loginuser')
 
-    data = Gallery.objects.all()
-    gallery_images = Gallery.objects.filter(user=request.user)
+    gallery_images = Gallery.objects.all()  # Fetch all gallery items
     return render(request, 'adminindex.html', {"gallery_images": gallery_images})
 
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
 
 def admin_users(request):
     if not request.user.is_authenticated or not request.user.is_superuser:
-        # Redirect non-admin users or unauthenticated users
         return redirect('loginuser')
 
-    users = User.objects.all()  # Fetch all users
+    # Exclude superusers (admin accounts)
+    users = User.objects.filter(is_superuser=False)
     return render(request, 'admin_users.html', {'users': users})
+
 
 
 def firstpage(request): 
@@ -147,42 +176,50 @@ def verifyotp(request):
 
     return render(request, "otp.html")
 
-def delete_g(request,id):
-    feeds=Gallery.objects.filter(pk=id)
+def delete_g(request, id):
+    feeds = Gallery.objects.filter(pk=id)
     feeds.delete()
-    return redirect('index')
+    return redirect('adminindex')
 
 def edit_g(request, pk):
     gallery_item = Gallery.objects.filter(pk=pk).first()
 
     if not gallery_item:
         messages.error(request, "Gallery item not found.")
-        return redirect('index')
+        return redirect('adminindex')  # Redirect to adminindex instead of 'index'
 
     if request.method == "POST":
         edit1 = request.POST.get('todo')
-        edit2 = request.POST.get('date')
-        edit3 = request.POST.get('course')
+        edit2 = request.POST.get('model')
+        edit3 = request.POST.get('date')
+        edit4 = request.POST.get('quantity')
+        edit5 = request.POST.get('description')
 
+        gallery_item.name = edit1
+        gallery_item.model = edit2
+        gallery_item.price = edit3
+        gallery_item.quantity = edit4
+        gallery_item.description = edit5
 
-        gallery_item.name= edit1
-        gallery_item.model= edit2
-        gallery_item.price= edit3
-
-        if 'image' in request.FILES:
-            gallery_item.feedimage = request.FILES['image']
+        # Update images if new ones are uploaded
+        if 'feedimage1' in request.FILES:
+            gallery_item.feedimage1 = request.FILES['feedimage1']
+        if 'feedimage2' in request.FILES:
+            gallery_item.feedimage2 = request.FILES['feedimage2']
+        if 'feedimage3' in request.FILES:
+            gallery_item.feedimage3 = request.FILES['feedimage3']
+        if 'feedimage4' in request.FILES:
+            gallery_item.feedimage4 = request.FILES['feedimage4']
+        if 'feedimage5' in request.FILES:
+            gallery_item.feedimage5 = request.FILES['feedimage5']
 
         gallery_item.save()
 
         messages.success(request, "Gallery item updated successfully.")
-        return redirect('index')
+        return redirect('adminindex')
 
     else:
         return render(request, 'edit_gallery.html', {'data': gallery_item})
-
-
-
-
 
 
 def getusername(request):
@@ -446,5 +483,8 @@ def logoutadmin(request):
     return redirect('firstpage')
 
 
+def new_arrivals_page(request):
+    gallery_images = Gallery.objects.all().order_by('-id')  # or use a 'created_at' field if available
+    return render(request, 'new_arrivals_page.html', {'gallery_images': gallery_images})
 
 
