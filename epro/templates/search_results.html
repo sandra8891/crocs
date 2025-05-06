@@ -15,7 +15,7 @@
                 {% for i in results %}
                     <div>
                         <a href="{% url 'products' i.id %}">
-                            <img src="{{ i.feedimage.url }}" alt="Gallery Image" width="300"><br>
+                            <img src="{{ i.feedimage1.url }}" alt="Gallery Image" width="300"><br>
                             <span>{{ i.name }}</span><br>
                             <span>{{ i.model }}</span><br>
                             <span>{{ i.price }}</span>

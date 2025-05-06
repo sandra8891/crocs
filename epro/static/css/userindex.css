@@ -1,3 +1,4 @@
+/* ========== GLOBAL RESET ========== */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -8,212 +9,186 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     background-color: white;
+    color: #333;
 }
 
-
+/* ========== TOP NAVIGATION ========== */
 .topnav {
-    /* background-color:rgb(209, 7, 209); */
-    background-color: #c187d8;
+    background-color: #000;
     padding: 10px 20px;
-    font-size: 1.2rem;
-    color: white;
-    border-bottom: 1px solid #000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
+    color: #fff;
+    border-bottom: 1px solid #000;
 }
-
 
 .topnav p {
-    color: white;
-    flex-grow: 1; 
-    text-align: center; 
-    margin: 0; 
+    font-size: 14px;
+    flex-grow: 1;
+    text-align: center;
 }
 
-
-.topnav .account-dropdown {
+/* ========== ACCOUNT DROPDOWN ========== */
+.account-dropdown {
     position: relative;
+    margin-right: 20px;
     display: inline-block;
-    margin-right: 20px; 
 }
 
+.account-button {
+    background: none;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 
+.account-button i {
+    margin-right: 5px;
+}
+
+.account-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    min-width: 178px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.account-dropdown:hover .account-menu {
+    display: block;
+}
+
+.account-menu a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.account-menu a:hover {
+    background-color: #f1f1f1;
+    color: #666;
+}
+
+/* ========== MAIN NAVIGATION ========== */
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: black; 
-    padding: 0px 40px; 
-    position: relative;
-    height: 90px; 
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 10px 0;
 }
-
-
 
 .logo img {
-    height: 100px; 
-    width: auto; 
+    width: 190px;
+    margin-left: 23px;
 }
-
 
 .left {
     display: flex;
-    gap: 25px; 
+    gap: 25px;
     align-items: center;
 }
 
-.left a {
-    text-decoration: none; /* Remove default underline from links */
-}
-
-.left a div {
-    color: white; /* Set the color to white for the link text */
+.left div {
     font-size: 1rem;
     cursor: pointer;
     padding: 5px 19px;
-    transition: color 0.3s ease; /* Smooth transition for hover effect */
 }
 
-/* Hover effect for links */
-.left a div:hover {
-    color: rgb(253, 84, 253); /* Change to a different color on hover, like tomato */
+.left a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
 }
 
-/* Right-side search and social media icons */
+.left a:hover {
+    color: #ff4081;
+}
+
 .right {
     display: flex;
     align-items: center;
-    gap: 20px; /* Adjust space between elements */
+    gap: 26px;
 }
 
-/* Search form input field */
+.right form {
+    display: flex;
+    align-items: center;
+}
+
 .search-input {
-    padding: 8px 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    outline: none;
 }
 
-/* Search button */
-.right button {
-    background-color: transparent;
-    border: none;
+.right form button {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-left: none;
+    background-color: #f0f0f0;
+    border-radius: 0 5px 5px 0;
     cursor: pointer;
 }
 
-.right button i {
-    font-size: 1.5rem; /* Adjust the search icon size */
-    color: #555;
-    transition: color 0.3s ease; /* Smooth transition for the icon color */
-}
-
-/* Hover effect for search icon */
-.right button:hover i {
-    color: rgb(217, 33, 217); /* Change the color of the search icon on hover */
-}
-
-/* Wishlist and Cart icons */
-.right .bi {
+.right a {
+    color: #333;
+    text-decoration: none;
     font-size: 1.9rem;
-    color: #555;
-    cursor: pointer;
+    position: relative;
     margin-right: 26px;
 }
 
-/* Wishlist icon hover */
-.right .bi-heart-fill:hover,
-.right .bi-cart-fill:hover {
-    color: rgb(192, 23, 192); /* Change color on hover for both wishlist and cart icons */
+.right a span {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff4081;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
 }
 
-/* Optional: For better mobile responsiveness */
-@media (max-width: 768px) {
-    .nav {
-        flex-direction: column; /* Stack items vertically on smaller screens */
-        padding: 10px;
-    }
-
-    .left, .right {
-        flex-direction: column;
-        gap: 15px; /* Space between items on small screens */
-    }
-    
-    .left a div {
-        font-size: 1.1rem; /* Increase font size on smaller screens */
-    }
-    
-    .right {
-        gap: 15px;
-    }
-}
-
-
-
-
-
-
-
-/* Reset default styles */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    background-color: white;
-}
-
-/* Banner Section */
+/* ========== BANNER SECTION ========== */
 .banner {
     position: relative;
     width: 100%;
-    height: 70vh; /* Adjust height to fit screen */
-    background-image: url('{% static "image/c3.webp" %}'); /* Use the Nike shoe image as background */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5%;
-}
-
-/* Existing styles for topnav, nav, gallery-grid, footer remain unchanged */
-
-/* Banner Section */
-.banner {
-    position: relative;
-    width: 100%;
-    min-height: 400px; /* Minimum height for larger screens */
+    min-height: 400px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 20px 5%;
-    background-color:#c0ae97; /* Light background for contrast */
+    background-color: #c0ae97;
 }
 
 .banner-content {
     max-width: 40%;
-    /* color: #800080; */
-    
-
 }
 
 .banner-content h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color:purple;
-}
-
-.banner-content h1 span {
+    color: purple;
     font-weight: bold;
-    color:purple;
 }
 
 .banner-content p {
@@ -221,21 +196,6 @@ body {
     color: #666;
     margin-bottom: 1.5rem;
 }
-
-/* .shop-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #800080;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.shop-btn:hover {
-    background-color: #660066;
-} */
 
 .banner-image {
     flex: 1;
@@ -245,42 +205,20 @@ body {
 .banner-image img {
     max-width: 1000px;
     height: auto;
-    max-height: 1000px; 
+    max-height: 1000px;
     object-fit: contain;
-    padding-right: px;
 }
 
-/* .social-icons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.social-icons a img {
-    width: 24px;
-    height: 24px;
-    filter: grayscale(100%);
-    transition: filter 0.3s;
-}
-
-.social-icons a img:hover {
-    filter: grayscale(0%);
-} */
-
-/* Responsive Design */
+/* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
     .banner {
-        min-height: 300px;
         flex-direction: column;
         text-align: center;
         padding: 20px;
     }
 
-    .banner-content {
+    .banner-content,
+    .banner-image {
         max-width: 100%;
     }
 
@@ -292,20 +230,8 @@ body {
         font-size: 0.9rem;
     }
 
-    .banner-image {
-        margin-top: 20px;
-    }
-
     .banner-image img {
         max-height: 200px;
-    }
-
-    .social-icons {
-        position: static;
-        flex-direction: row;
-        justify-content: center;
-        transform: none;
-        margin-top: 20px;
     }
 }
 
@@ -325,34 +251,27 @@ body {
     .banner-image img {
         max-height: 150px;
     }
-
-    .shop-btn {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-    }
 }
 
-
-
-
-
+/* ========== GENDER COLLECTIONS ========== */
 .gender-collections {
     padding: 60px 0;
     background-color: #f9f9f9;
-  }
-  
-  .section-title {
+}
+
+.section-title {
     text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  .section-title h2 {
+    margin: 40px 0;
+}
+
+.section-title h2,
+.section-title h1 {
     font-size: 32px;
     font-weight: bold;
-    color:#ba6bd9;
-  }
-  
-  .collections-grid {
+    color: #ba6bd9;
+}
+
+.collections-grid {
     display: flex;
     gap: 30px;
     justify-content: center;
@@ -360,9 +279,9 @@ body {
     flex-wrap: wrap;
     max-width: 1200px;
     margin: 0 auto;
-  }
-  
-  .collection-card {
+}
+
+.collection-card {
     flex: 1;
     min-width: 300px;
     background: #fff;
@@ -371,65 +290,36 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease;
-  }
-  
-  .collection-card:hover {
+}
+
+.collection-card:hover {
     transform: translateY(-5px);
-  }
-  
-  .collection-card img {
+}
+
+.collection-card img {
     width: 100%;
     height: auto;
     display: block;
-  }
-  
-  .card-content {
+}
+
+.card-content {
     padding: 20px;
-  }
-  
-  .card-content h3 {
+}
+
+.card-content h3 {
     font-size: 24px;
     margin-top: 10px;
     color: #333;
-  }
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- /* New Arrivals Section */
-.section-title {
-    text-align: center;
-    margin: 40px 0;
 }
 
-.section-title h1 {
-    font-size: 32px;
-    font-weight: bold;
-    color: #ba6bd9;
-}
-
+/* ========== NEW ARRIVALS ========== */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 30px;
     padding: 20px;
-    max-width: 1200px; /* Added to center the grid like in the screenshot */
-    margin: 0 auto; /* Center the grid */
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .product-item {
@@ -437,14 +327,14 @@ body {
     padding: 15px;
     border-radius: 12px;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative; /* For positioning the "New" badge */
+    position: relative;
 }
 
 .product-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .image-container {
@@ -462,7 +352,6 @@ body {
     transform: scale(1.1);
 }
 
-/* New badge */
 .new-badge {
     position: absolute;
     top: 10px;
@@ -475,11 +364,9 @@ body {
     z-index: 1;
 }
 
-/* Style and position the icon container */
 .icon-container {
     position: absolute;
     top: 50%;
-    /* right: 1px; */
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
@@ -488,7 +375,6 @@ body {
     transition: opacity 0.3s ease;
 }
 
-/* Show icons when hovering anywhere on the image-container */
 .image-container:hover .icon-container {
     opacity: 1;
 }
@@ -500,7 +386,6 @@ body {
     padding: 8px;
     border-radius: 50%;
     transition: color 0.3s, transform 0.2s ease;
-    display: block;
 }
 
 .icon-container a i:hover {
@@ -516,122 +401,41 @@ body {
     color: #333;
 }
 
-/* Style for the price */
 .gallery-grid span.price {
     color: purple;
     font-weight: bold;
 }
 
-
-
-
-
-
-/* Styling for the logout and other links */
-a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-    padding: 10px 20px;
-    display: inline-block;
-    margin: 20px 0;
-}
-
-a:hover {
-    color: #0056b3;
-}
-
-
-.footer{
+/* ========== FOOTER ========== */
+.footer {
     background-color: black;
     display: flex;
-    height:350px;
-
+    height: 350px;
 }
-.footer h4{
+
+.footer h4 {
     margin-bottom: 40px;
     font-size: 16px;
     color: white;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-.footer li{
+
+.footer li {
     list-style: none;
     margin: 15px;
     color: rgb(175, 175, 175);
 }
-.footer div{
+
+.footer div {
     font-size: 15px;
-    font-weight: 500px;
-    /*margin-left: 200px;*/
     margin-top: 50px;
 }
-.footlogo{
+
+.footlogo {
     margin-left: 200px;
     margin-top: 50px;
     margin-right: 60px;
 }
-.foot2{
-    margin-left: 160px;
-    
-}
 
-/* Dropdown Container */
-.account-dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* The Trigger Button */
-.account-button {
-    background: none;
-    border: groove;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  
-  /* The Dropdown Menu (initially hidden) */
-  .account-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    min-width: 189px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-    max-height: 300px; /* Max height */
-    overflow-y: auto; /* Scroll if the content is too long */
-  }
-  
-  /* Show the menu on hover */
-  .account-dropdown:hover .account-menu {
-    display: block;
-  }
-  
-  /* Dropdown Links */
-  .account-menu a {
-    display: block;
-    padding: 8px 15px; /* Reduced padding to decrease gap */
-    color: black;
-    text-decoration: none;
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and color */
-    border-bottom: 1px solid #333; /* Permanent underline */
-  }
-  
-  /* Hover effect for links */
-  .account-menu a:hover {
-    background-color: #f1f1f1;
-    color: #666; /* Change text color to a lighter shade */
-  }
-  
-  
-  
-  
-   
+.foot2 {
+    margin-left: 160px;
+}

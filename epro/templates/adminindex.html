@@ -15,14 +15,13 @@
 
     <div class="nav">
         <div class="logo">
-            <img src="" alt="crocs">
+            <!-- <img src="{% static 'image/logo.jpeg' %}" alt="crocs"> -->
         </div>
         <div class="left">
             <a href="{% url 'admin_users' %}"><button>View Registered Users</button></a>
             <a href="{% url 'gallery' %}"><button>Upload a Product</button></a> 
             <a href="{% url 'adminlogout' %}"><button>Logout</button></a>
         </div>
-        
     </div> 
 
     <div class="gallery-grid">
@@ -55,6 +54,7 @@
                     <span><strong>Model:</strong> {{ i.model }}</span><br>
                     <span><strong>Price:</strong> {{ i.price }}</span><br>
                     <span><strong>Quantity:</strong> {{ i.quantity }}</span><br>
+                    <span><strong>Category:</strong> {{ i.get_category_display }}</span><br>
                     <span><strong>Description:</strong> {{ i.description|default:"No description available" }}</span><br>
                 </div>
                 <div class="button-group">

@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from .models import *
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
-
+from .models import Gallery, Cart, Wishlist
 
 
 
@@ -27,9 +27,10 @@ def gallery(request):
         quantity = request.POST.get("quantity")
         model = request.POST.get("model")
         description = request.POST.get("description")
+        category = request.POST.get("category")
 
         # Basic validation
-        if not name or not price or not quantity or not model:
+        if not name or not price or not quantity or not model or not category:
             messages.error(request, "Please fill in all required fields.")
             return render(request, "galleryupload.html")
 
@@ -45,7 +46,8 @@ def gallery(request):
                 feedimage4=myimage4,
                 feedimage5=myimage5,
                 description=description,
-                user=request.user
+                user=request.user,
+                category=category
             )
             obj.save()
             messages.success(request, "Product uploaded successfully!")
@@ -55,7 +57,6 @@ def gallery(request):
             return render(request, "galleryupload.html")
 
     return render(request, "galleryupload.html")
-
 
 def usersignup(request):
     if request.POST:
@@ -186,7 +187,7 @@ def edit_g(request, pk):
 
     if not gallery_item:
         messages.error(request, "Gallery item not found.")
-        return redirect('adminindex')  # Redirect to adminindex instead of 'index'
+        return redirect('adminindex')
 
     if request.method == "POST":
         edit1 = request.POST.get('todo')
@@ -194,12 +195,14 @@ def edit_g(request, pk):
         edit3 = request.POST.get('date')
         edit4 = request.POST.get('quantity')
         edit5 = request.POST.get('description')
+        category = request.POST.get('category')
 
         gallery_item.name = edit1
         gallery_item.model = edit2
         gallery_item.price = edit3
         gallery_item.quantity = edit4
         gallery_item.description = edit5
+        gallery_item.category = category
 
         # Update images if new ones are uploaded
         if 'feedimage1' in request.FILES:
@@ -220,7 +223,6 @@ def edit_g(request, pk):
 
     else:
         return render(request, 'edit_gallery.html', {'data': gallery_item})
-
 
 def getusername(request):
     if request.POST:
@@ -488,3 +490,18 @@ def new_arrivals_page(request):
     return render(request, 'new_arrivals_page.html', {'gallery_images': gallery_images})
 
 
+
+def category_products(request, category):
+    gallery_images = Gallery.objects.filter(category=category)
+    if request.user.is_authenticated:
+        cart_item_count = Cart.objects.filter(user=request.user).count()
+        wishlist_item_count = Wishlist.objects.filter(user=request.user).count()
+    else:
+        cart_item_count = 0
+        wishlist_item_count = 0
+    return render(request, "category_products.html", {
+        "gallery_images": gallery_images,
+        "cart_item_count": cart_item_count,
+        "wishlist_item_count": wishlist_item_count,
+        "category": category.capitalize()
+    })

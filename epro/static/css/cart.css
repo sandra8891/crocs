@@ -1,3 +1,4 @@
+/* Body and General Styles */
 body.rr {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,153 +7,168 @@ body.rr {
     color: #333;
 }
 
-/* Top bar */
+/* Top Navigation Bar */
 .topnav {
-    /* background-color:rgb(209, 7, 209); */
-    background-color: #c187d8;
+    background-color: #000;
     padding: 10px 20px;
-    font-size: 1.2rem;
-    color: white;
-    border-bottom: 1px solid #000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
+    color: #fff;
+    border-bottom: 1px solid #000;
 }
-
 
 .topnav p {
-    color: white;
-    flex-grow: 1; 
-    text-align: center; 
-    margin: 0; 
+    font-size: 14px;
+    flex-grow: 1;
+    text-align: center;
 }
 
-
-.topnav .account-dropdown {
+.account-dropdown {
     position: relative;
-    display: inline-block;
-    margin-right: 20px; 
+    margin-right: 20px;
 }
 
+.account-button {
+    background: none;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 
+.account-button i {
+    margin-right: 5px;
+}
+
+.account-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    min-width: 178px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.account-dropdown:hover .account-menu {
+    display: block;
+}
+
+.account-menu a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.account-menu a:hover {
+    background-color: #f1f1f1;
+    color: #666;
+}
+
+/* Main Navigation Bar */
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: black; 
-    padding: 0px 40px; 
-    position: relative;
-    height: 90px; 
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 14px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
-
 
 .logo img {
-    height: 100px; 
-    width: auto; 
+    width: 180px;
+    height: auto;
 }
-
 
 .left {
     display: flex;
-    gap: 25px; 
+    gap: 25px;
     align-items: center;
+}
+
+.left div {
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 5px 15px;
 }
 
 .left a {
-    text-decoration: none; /* Remove default underline from links */
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
 }
 
-.left a div {
-    color: white; /* Set the color to white for the link text */
-    font-size: 1rem;
-    cursor: pointer;
-    padding: 5px 19px;
-    transition: color 0.3s ease; /* Smooth transition for hover effect */
+.left a:hover {
+    color: #ff4081;
 }
 
-/* Hover effect for links */
-.left a div:hover {
-    color: rgb(253, 84, 253); /* Change to a different color on hover, like tomato */
-}
-
-/* Right-side search and social media icons */
 .right {
     display: flex;
     align-items: center;
-    gap: 20px; /* Adjust space between elements */
+    gap: 20px;
 }
 
-/* Search form input field */
+.right form {
+    display: flex;
+    align-items: center;
+}
+
 .search-input {
-    padding: 8px 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    outline: none;
 }
 
-/* Search button */
-.right button {
-    background-color: transparent;
-    border: none;
+.right form button {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-left: none;
+    background-color: #f0f0f0;
+    border-radius: 0 5px 5px 0;
     cursor: pointer;
 }
 
-.right button i {
-    font-size: 1.5rem; /* Adjust the search icon size */
-    color: #555;
-    transition: color 0.3s ease; /* Smooth transition for the icon color */
-}
-
-/* Hover effect for search icon */
-.right button:hover i {
-    color: rgb(217, 33, 217); /* Change the color of the search icon on hover */
-}
-
-/* Wishlist and Cart icons */
-.right .bi {
+.right a {
+    color: #333;
+    text-decoration: none;
     font-size: 1.9rem;
-    color: #555;
-    cursor: pointer;
-    margin-right: 26px;
+    position: relative;
 }
 
-/* Wishlist icon hover */
-.right .bi-heart-fill:hover,
-.right .bi-cart-fill:hover {
-    color: rgb(192, 23, 192); /* Change color on hover for both wishlist and cart icons */
+.right a span {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff4081;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
 }
 
-/* Optional: For better mobile responsiveness */
-@media (max-width: 768px) {
-    .nav {
-        flex-direction: column; /* Stack items vertically on smaller screens */
-        padding: 10px;
-    }
-
-    .left, .right {
-        flex-direction: column;
-        gap: 15px; /* Space between items on small screens */
-    }
-    
-    .left a div {
-        font-size: 1.1rem; /* Increase font size on smaller screens */
-    }
-    
-    .right {
-        gap: 15px;
-    }
-}
-/* Cart title */
+/* Cart Title */
 .cart-title {
     text-align: center;
     font-size: 26px;
     margin-top: 20px;
 }
 
-/* Cart layout */
+/* Cart Layout */
 .gallery-grid {
     display: flex;
     flex-direction: column;
@@ -217,7 +233,7 @@ body.rr {
     border-radius: 4px;
 }
 
-/* Cart summary */
+/* Cart Summary */
 .cart-summary {
     max-width: 1000px;
     margin: auto;
@@ -232,10 +248,11 @@ body.rr {
 .footer {
     background-color: #222;
     color: white;
-    padding: 40px 30px;
+    padding: 40px 60px;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap: 40px;
 }
 
 .footer ul {
@@ -251,8 +268,33 @@ body.rr {
 .footer h4 {
     font-size: 16px;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .footer i {
     margin-right: 8px;
+}
+
+.footlogo {
+    flex: 1;
+}
+
+.foot1, .foot2 {
+    flex: 2;
+}
+
+/* Responsive Footer for smaller screens */
+@media (max-width: 768px) {
+    .footer {
+        padding: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+    .footer ul {
+        text-align: center;
+    }
+    .footlogo, .foot1, .foot2 {
+        flex: 1;
+        text-align: center;
+    }
 }
