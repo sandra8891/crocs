@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Buy Now - {{ product.name }}</h2>
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="quantity" value="{{ quantity }}">
+
+    <div class="form-group">
+        <label>Address:</label>
+        <textarea name="address" class="form-control" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Place:</label>
+        <input type="text" name="place" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label>Email:</label>
+        <input type="email" name="email" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label>Payment Method:</label>
+        <select name="payment_method" class="form-control" required>
+            <option value="COD">Cash on Delivery</option>
+            <option value="ONLINE">Online Payment</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Place Order</button>
+    </div>
+</form>
+
+</body>
+</html>

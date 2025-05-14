@@ -150,7 +150,7 @@ body {
 /* ======= WISHLIST ======= */
 h1 {
     text-align: center;
-    color: #4A90E2;
+    color: rgb(190, 12, 190) ;
     margin: 30px 0 10px;
 }
 
@@ -183,12 +183,12 @@ h1 {
 .wishlist-item a {
     margin-top: 10px;
     display: inline-block;
-    color: #E74C3C;
+    color: purple;
     text-decoration: none;
 }
 
 .wishlist-item a:hover {
-    color: #C0392B;
+    color: purple;
 }
 
 .back-to-home {
@@ -198,11 +198,11 @@ h1 {
 
 .back-to-home a {
     text-decoration: none;
-    color: #4A90E2;
+    color: purple;
 }
 
 .back-to-home a:hover {
-    color: #357ABD;
+    color: purple;
 }
 
 /* ======= FOOTER ======= */

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
+# from products.models import Product
 
 class Gallery(models.Model):
     CATEGORY_CHOICES = [
@@ -45,3 +46,32 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    
+    
+    
+
+class Order(models.Model):
+    PAYMENT_CHOICES = [
+        ('COD', 'Cash on Delivery'),
+        ('ONLINE', 'Online Payment'),
+    ]
+
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('SHIPPED', 'Shipped'),
+        ('DELIVERED', 'Delivered'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Gallery, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    address = models.TextField()
+    place = models.CharField(max_length=100)
+    email = models.EmailField()
+    payment_method = models.CharField(max_length=10, choices=PAYMENT_CHOICES)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order {self.id} by {self.user.username}"

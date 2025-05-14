@@ -33,6 +33,10 @@ urlpatterns = [
     path('myprofile/', views.myprofile, name='myprofile'),
     path('new-arrivals/', views.new_arrivals_page, name='new_arrivals_page'),
     path('category/<str:category>/', views.category_products, name='category_products'),
+    path('buy-now/<int:product_id>/', views.buy_now, name='buy_now'),
+    path('my-orders/', views.my_orders, name='my_orders'),
+    path('orders/', views.admin_orders, name='admin_orders'),
+
 ]
 
 if settings.DEBUG:

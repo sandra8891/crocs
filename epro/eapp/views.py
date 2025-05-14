@@ -10,6 +10,8 @@ from .models import *
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from .models import Gallery, Cart, Wishlist
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 
 
@@ -505,3 +507,66 @@ def category_products(request, category):
         "wishlist_item_count": wishlist_item_count,
         "category": category.capitalize()
     })
+    
+    
+
+
+@login_required
+def buy_now(request, product_id):
+    product = get_object_or_404(Gallery, id=product_id)
+    quantity = int(request.GET.get('quantity', 1))
+
+    if request.method == "POST":
+        address = request.POST.get('address')
+        place = request.POST.get('place')
+        email = request.POST.get('email')
+        payment_method = request.POST.get('payment_method')
+
+        if product.quantity >= quantity:
+            order = Order.objects.create(
+                user=request.user,
+                product=product,
+                quantity=quantity,
+                address=address,
+                place=place,
+                email=email,
+                payment_method=payment_method
+            )
+            product.quantity -= quantity
+            product.save()
+
+            messages.success(request, "Order placed successfully!")
+            return redirect('my_orders')
+        else:
+            messages.error(request, "Insufficient stock available.")
+
+    context = {
+        'product': product,
+        'quantity': quantity,
+    }
+    return render(request, 'buy_now.html', context)
+
+
+
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    
+    # Calculate total price for each order
+    for order in orders:
+        order.total_price = order.quantity * order.product.price
+    
+    return render(request, 'my_orders.html', {'orders': orders})
+
+
+
+
+
+@staff_member_required
+def admin_orders(request):
+    orders = Order.objects.all()  # Get all orders
+    for order in orders:
+        order.total_price = order.quantity * order.product.price  # Calculate total price for each order
+    return render(request, 'admin_orders.html', {'orders': orders})
+
+
+
