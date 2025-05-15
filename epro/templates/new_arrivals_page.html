@@ -33,6 +33,7 @@
         <!-- <img src="{% static 'image/logo.jpeg' %}" alt="crocs"> -->
     </div>
     <div class="left">
+        <a href="{% url 'firstpage' %}"><div>HOME</div></a>
         <a href="{% url 'category_products' category='women' %}"><div>WOMEN</div></a>
         <a href="{% url 'category_products' category='men' %}"><div>MEN</div></a>
         <a href="{% url 'category_products' category='unisex' %}"><div>UNISEX</div></a>
@@ -46,12 +47,12 @@
         </form>
         <div><a href="{% url 'wishlist_view' %}">
             <i class="bi bi-heart-fill"></i>
-            <span>{{ wishlist_item_count }}</span>
+            <!-- <span>{{ wishlist_item_count }}</span> -->
         </a></div>
         <div class="cart-icon">
             <a href="{% url 'cart_view' %}">
                 <i class="bi bi-cart-fill"></i>
-                <span>{{ cart_item_count }}</span>
+                <!-- <span>{{ cart_item_count }}</span> -->
             </a>
         </div>
     </div>
@@ -74,7 +75,7 @@
             </div>
             <span>{{ i.name }}</span>
             <span>{{ i.model }}</span>
-            <span class="price">${{ i.price }}</span><br>
+            <span class="price">₹{{ i.price }}</span><br>
         </div>
     {% endfor %}
 </div>

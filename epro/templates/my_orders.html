@@ -39,7 +39,7 @@
         <a href="{% url 'category_products' category='men' %}"><div>MEN</div></a>
         <a href="{% url 'category_products' category='unisex' %}"><div>UNISEX</div></a>
         <a href="{% url 'new_arrivals_page' %}"><div>NEW ARRIVALS</div></a>
-        <a href="{% url 'about_us' %}"><div>ABOUT US</div></a>
+        <!-- <a href="{% url 'about_us' %}"><div>ABOUT US</div></a> -->
     </div>
     <div class="right">
         <form action="{% url 'search_results' %}" method="get">
@@ -82,7 +82,7 @@
             <td data-label="Total">{{ order.total_price }}</td>
             <td data-label="Status">{{ order.status }}</td>
             <td data-label="Payment Method">{{ order.payment_method }}</td>
-            <td data-label="Date">{{ order.created_at }}</td>
+            <td data-label="Date">{{ order.created_at|date:"Y-m-d" }}</td>
 
         </tr>
         {% endfor %}

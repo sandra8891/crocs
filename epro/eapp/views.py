@@ -11,6 +11,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from .models import Gallery, Cart, Wishlist
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.decorators.csrf import csrf_exempt
+
+import razorpay
+import json
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 
@@ -508,45 +514,225 @@ def category_products(request, category):
         "category": category.capitalize()
     })
     
-    
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from decimal import Decimal
+from .models import Cart, UserProfile, Order
+import razorpay
+from django.conf import settings
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 @login_required
-def buy_now(request, product_id):
-    product = get_object_or_404(Gallery, id=product_id)
-    quantity = int(request.GET.get('quantity', 1))
+def checkout(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+
+    if not cart_items:
+        messages.error(request, "Your cart is empty.")
+        return redirect('cart_view')
+
+    # Calculate total price and item totals
+    total_price = sum(Decimal(item.product.price) * item.quantity for item in cart_items)
+    for item in cart_items:
+        item.total = Decimal(item.product.price) * item.quantity  # Add total for each item
 
     if request.method == "POST":
         address = request.POST.get('address')
         place = request.POST.get('place')
         email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
         payment_method = request.POST.get('payment_method')
 
-        if product.quantity >= quantity:
+        # Validate input
+        if not all([address, place, email, payment_method]):
+            messages.error(request, "Please fill in all required fields.")
+            return render(request, 'checkout.html', {
+                'cart_items': cart_items,
+                'total_price': total_price,
+                'user_profile': user_profile,
+            })
+
+        # Check stock availability
+        for item in cart_items:
+            if item.product.quantity < item.quantity:
+                messages.error(request, f"Insufficient stock for {item.product.name}.")
+                return render(request, 'checkout.html', {
+                    'cart_items': cart_items,
+                    'total_price': total_price,
+                    'user_profile': user_profile,
+                })
+
+        # Validate total_price
+        max_amount = Decimal('100000')
+        if total_price <= 0:
+            messages.error(request, "Order amount cannot be zero or negative.")
+            return render(request, 'checkout.html', {
+                'cart_items': cart_items,
+                'total_price': total_price,
+                'user_profile': user_profile,
+            })
+        if total_price > max_amount:
+            messages.error(request, f"Order amount exceeds maximum limit of {max_amount} INR.")
+            return render(request, 'checkout.html', {
+                'cart_items': cart_items,
+                'total_price': total_price,
+                'user_profile': user_profile,
+            })
+
+        # Create orders
+        orders = []
+        for item in cart_items:
             order = Order.objects.create(
                 user=request.user,
-                product=product,
-                quantity=quantity,
+                product=item.product,
+                quantity=item.quantity,
                 address=address,
                 place=place,
                 email=email,
-                payment_method=payment_method
+                phone_number=phone_number,
+                payment_method=payment_method,
+                total_amount=Decimal(item.product.price) * item.quantity,
+                username=request.user.username
             )
-            product.quantity -= quantity
-            product.save()
+            orders.append(order)
 
-            messages.success(request, "Order placed successfully!")
-            return redirect('my_orders')
-        else:
-            messages.error(request, "Insufficient stock available.")
+        if payment_method == 'ONLINE':
+            client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+            razorpay_order = client.order.create({
+                'amount': int(total_price * 100),
+                'currency': 'INR',
+                'payment_capture': '1'
+            })
+
+            # Update all orders with the same provider_order_id
+            for order in orders:
+                order.provider_order_id = razorpay_order['id']
+                order.save()
+
+            # Store order and cart item IDs in session
+            request.session['checkout_order_ids'] = [order.id for order in orders]
+            request.session['cart_item_ids'] = [item.id for item in cart_items]
+
+            callback_url = request.build_absolute_uri(reverse('razorpay_callback'))
+            return render(request, 'payment.html', {
+                'order': orders[0],
+                'razorpay_key': settings.RAZOR_KEY_ID,
+                'razorpay_order_id': razorpay_order['id'],
+                'amount': int(total_price * 100),
+                'currency': 'INR',
+                'callback_url': callback_url,
+                'name': request.user.username,
+                'description': f'Payment for multiple orders',
+                'prefill': {
+                    'name': request.user.username,
+                    'email': email,
+                    'contact': phone_number or '',
+                }
+            })
+
+        # For COD: Update stock, clear cart, and redirect
+        for item in cart_items:
+            item.product.quantity -= item.quantity
+            item.product.save()
+        cart_items.delete()
+        messages.success(request, "Order placed successfully!")
+        return redirect('my_orders')
+
+    return render(request, 'checkout.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'user_profile': user_profile,
+    })
+
+@login_required
+def buy_now(request, product_id):
+    product = get_object_or_404(Gallery, id=product_id)
+    user_profile = UserProfile.objects.filter(user=request.user).first()
+    quantity = int(request.GET.get('quantity', 1))
+
+    if quantity < 1:
+        messages.error(request, "Quantity must be at least 1.")
+        return redirect('products', id=product_id)
+
+    if product.quantity < quantity:
+        messages.error(request, f"Only {product.quantity} units available.")
+        return redirect('products', id=product_id)
+
+    if request.method == "POST":
+        address = request.POST.get('address')
+        place = request.POST.get('place')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        payment_method = request.POST.get('payment_method')
+
+        # Validate input
+        if not all([address, place, email, payment_method]):
+            messages.error(request, "Please fill in all required fields.")
+            return render(request, 'buy_now.html', {
+                'product': product,
+                'quantity': quantity,
+                'user_profile': user_profile,
+            })
+
+        total_amount = Decimal(product.price) * quantity
+
+        # Create order
+        order = Order.objects.create(
+            user=request.user,
+            product=product,
+            quantity=quantity,
+            address=address,
+            place=place,
+            email=email,
+            phone_number=phone_number,
+            payment_method=payment_method,
+            total_amount=total_amount,
+            username=request.user.username
+        )
+
+        if payment_method == 'ONLINE':
+            client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+            razorpay_order = client.order.create({
+                'amount': int(total_amount * 100),
+                'currency': 'INR',
+                'payment_capture': '1'
+            })
+
+            order.provider_order_id = razorpay_order['id']
+            order.save()
+
+            callback_url = request.build_absolute_uri(reverse('razorpay_callback'))
+            return render(request, 'payment.html', {
+                'order': order,
+                'razorpay_key': settings.RAZOR_KEY_ID,
+                'razorpay_order_id': razorpay_order['id'],
+                'amount': int(total_amount * 100),
+                'currency': 'INR',
+                'callback_url': callback_url,
+                'name': request.user.username,
+                'description': f'Payment for order {order.id}',
+                'prefill': {
+                    'name': request.user.username,
+                    'email': email,
+                    'contact': phone_number or '',
+                }
+            })
+
+        # For COD: Update stock and redirect
+        product.quantity -= quantity
+        product.save()
+        messages.success(request, "Order placed successfully!")
+        return redirect('my_orders')
 
     context = {
         'product': product,
         'quantity': quantity,
+        'user_profile': user_profile,
     }
     return render(request, 'buy_now.html', context)
-
-
 
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
@@ -568,5 +754,236 @@ def admin_orders(request):
         order.total_price = order.quantity * order.product.price  # Calculate total price for each order
     return render(request, 'admin_orders.html', {'orders': orders})
 
+@staff_member_required
+def complete_order(request, order_id):
+    if request.method == "POST":
+        order = get_object_or_404(Order, id=order_id)
+        if order.status != 'COMPLETED':
+            order.status = 'COMPLETED'
+            order.save()
+            messages.success(request, f"Order {order.id} marked as COMPLETED.")
+        else:
+            messages.info(request, f"Order {order.id} is already COMPLETED.")
+    return redirect('admin_orders')
 
 
+
+
+
+
+
+#######razorpay#######
+
+@login_required
+def order_payment(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+    # Calculate total amount (product price * quantity)
+    total_amount = order.product.price * order.quantity
+
+    # Create Razorpay order
+    razorpay_order = client.order.create({
+        'amount': int(total_amount * 100),  # Amount in paise
+        'currency': 'INR',
+        'payment_capture': '1'  # Auto-capture payment
+    })
+
+    # Save Razorpay order ID to the order
+    order.provider_order_id = razorpay_order['id']
+    order.save()
+
+    # Build callback URL
+    callback_url = request.build_absolute_uri(reverse('razorpay_callback'))
+
+    return render(request, 'payment.html', {
+        'order': order,
+        'razorpay_key': settings.RAZOR_KEY_ID,
+        'razorpay_order_id': razorpay_order['id'],
+        'amount': int(total_amount * 100),
+        'currency': 'INR',
+        'callback_url': callback_url,
+        'name': order.user.username,
+        'description': f'Payment for order {order.id}',
+        'prefill': {
+            'name': order.user.username,
+            'email': order.email,
+            'contact': '',  # Add phone number if available in UserProfile
+        }
+    })
+    
+    
+@csrf_exempt
+def razorpay_callback(request):
+    client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+    if "razorpay_signature" in request.POST:
+        payment_id = request.POST.get('razorpay_payment_id', '')
+        provider_order_id = request.POST.get('razorpay_order_id', '')
+        signature_id = request.POST.get('razorpay_signature', '')
+
+        try:
+            orders = Order.objects.filter(provider_order_id=provider_order_id)
+            if not orders:
+                messages.error(request, 'Order not found.')
+                return redirect('my_orders')
+
+            params_dict = {
+                'razorpay_order_id': provider_order_id,
+                'razorpay_payment_id': payment_id,
+                'razorpay_signature': signature_id
+            }
+            if client.utility.verify_payment_signature(params_dict):
+                for order in orders:
+                    order.payment_id = payment_id
+                    order.signature_id = signature_id
+                    order.status = 'PENDING'
+                    order.product.quantity -= order.quantity
+                    order.product.save()
+                    order.save()
+                # Clear cart if applicable
+                if 'checkout_order_ids' in request.session:
+                    Cart.objects.filter(id__in=request.session.get('cart_item_ids', [])).delete()
+                    del request.session['checkout_order_ids']
+                    del request.session['cart_item_ids']
+                messages.success(request, 'Payment successful! Your orders are confirmed.')
+            else:
+                for order in orders:
+                    order.status = 'FAILED'
+                    order.save()
+                messages.error(request, 'Payment verification failed.')
+            return redirect('my_orders')
+
+        except Order.DoesNotExist:
+            messages.error(request, 'Order not found.')
+            return redirect('my_orders')
+
+    else:
+        error_metadata = json.loads(request.POST.get('error[metadata]', '{}'))
+        provider_order_id = error_metadata.get('order_id', '')
+
+        try:
+            orders = Order.objects.filter(provider_order_id=provider_order_id)
+            for order in orders:
+                order.status = 'FAILED'
+                order.save()
+            messages.error(request, 'Payment failed. Please try again.')
+            return redirect('my_orders')
+
+        except Order.DoesNotExist:
+            messages.error(request, 'Order not found.')
+            return redirect('my_orders')
+        
+        
+        
+        
+        
+# @login_required
+# def order_pay(request, order_id):
+#     order = get_object_or_404(Order, id=order_id)
+#     client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+#     # Use total_amount from Order model
+#     total_amount = order.total_amount
+
+#     # Validate total_amount
+#     max_amount = 100000  # 100,000 INR
+#     if total_amount <= 0:
+#         messages.error(request, "Order amount cannot be zero or negative.")
+#         return redirect('my_orders')
+#     if total_amount > max_amount:
+#         messages.error(request, f"Order amount exceeds maximum limit of {max_amount} INR.")
+#         return redirect('my_orders')
+
+#     # Create Razorpay order
+#     razorpay_order = client.order.create({
+#         'amount': int(total_amount * 100),  # Amount in paise
+#         'currency': 'INR',
+#         'payment_capture': '1'
+#     })
+
+#     # Save Razorpay order ID
+#     order.provider_order_id = razorpay_order['id']
+#     order.save()
+
+#     # Build callback URL
+#     callback_url = request.build_absolute_uri(reverse('razorpay_callback'))
+
+#     return render(request, 'payment.html', {
+#         'order': order,
+#         'razorpay_key': settings.RAZOR_KEY_ID,
+#         'razorpay_order_id': razorpay_order['id'],
+#         'amount': int(total_amount * 100),
+#         'currency': 'INR',
+#         'callback_url': callback_url,
+#         'name': order.user.username,
+#         'description': f'Payment for order {order.id}',
+#         'prefill': {
+#             'name': order.user.username,
+#             'email': order.email,
+#             'contact': '',  # Add phone number if available
+#         }
+#     })
+
+# @csrf_exempt
+# def razorpay_call(request):
+#     client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+#     if "razorpay_signature" in request.POST:
+#         payment_id = request.POST.get('razorpay_payment_id', '')
+#         provider_order_id = request.POST.get('razorpay_order_id', '')
+#         signature_id = request.POST.get('razorpay_signature', '')
+
+#         try:
+#             orders = Order.objects.filter(provider_order_id=provider_order_id)
+#             if not orders:
+#                 messages.error(request, 'Order not found.')
+#                 return redirect('my_orders')
+
+#             params_dict = {
+#                 'razorpay_order_id': provider_order_id,
+#                 'razorpay_payment_id': payment_id,
+#                 'razorpay_signature': signature_id
+#             }
+#             if client.utility.verify_payment_signature(params_dict):
+#                 for order in orders:
+#                     order.payment_id = payment_id
+#                     order.signature_id = signature_id
+#                     order.status = 'PENDING'
+#                     # Update product stock only on successful payment
+#                     order.product.quantity -= Decimal(order.quantity)
+#                     order.product.save()
+#                     order.save()
+#                 # Clear cart if order IDs match session
+#                 if 'checkout_order_ids' in request.session:
+#                     Cart.objects.filter(id__in=request.session.get('cart_item_ids', [])).delete()
+#                     del request.session['checkout_order_ids']
+#                     del request.session['cart_item_ids']
+#                 messages.success(request, 'Payment successful! Your orders are confirmed.')
+#             else:
+#                 for order in orders:
+#                     order.status = 'FAILED'
+#                     order.save()
+#                 messages.error(request, 'Payment verification failed.')
+#             return redirect('my_orders')
+
+#         except Order.DoesNotExist:
+#             messages.error(request, 'Order not found.')
+#             return redirect('my_orders')
+
+#     else:
+#         # Handle failed payment
+#         error_metadata = json.loads(request.POST.get('error[metadata]', '{}'))
+#         provider_order_id = error_metadata.get('order_id', '')
+
+#         try:
+#             orders = Order.objects.filter(provider_order_id=provider_order_id)
+#             for order in orders:
+#                 order.status = 'FAILED'
+#                 order.save()
+#             messages.error(request, 'Payment failed. Please try again.')
+#             return redirect('my_orders')
+
+#         except Order.DoesNotExist:
+#             messages.error(request, 'Order not found.')
+#             return redirect('my_orders')

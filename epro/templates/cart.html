@@ -34,6 +34,7 @@
             <!-- <img src="{% static 'image/logo.jpeg' %}" alt="crocs"> -->
         </div>
         <div class="left">
+            <a href="{% url 'firstpage' %}"><div>HOME</div></a>
             <a href="{% url 'category_products' category='women' %}"><div>WOMEN</div></a>
             <a href="{% url 'category_products' category='men' %}"><div>MEN</div></a>
             <a href="{% url 'category_products' category='unisex' %}"><div>UNISEX</div></a>
@@ -99,8 +100,9 @@
         
     </div>
     <div class="cart-summary">
-        <p>Total Price: ${{ total_price }}</p>
+        <p>Total Price: ₹{{ total_price }}</p>
     </div>
+    <a href="{% url 'checkout' %}"><button>checkout</button></a>
     {% else %}
       <p>Your cart is empty.</p>
     {% endif %}

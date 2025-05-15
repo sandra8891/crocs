@@ -1,8 +1,9 @@
+# urls.py
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from .import views
+from . import views
 
 urlpatterns = [
     path('login', views.loginuser, name='loginuser'),
@@ -24,7 +25,7 @@ urlpatterns = [
     path('adminlogout', views.logoutadmin, name="adminlogout"),
     path('deletion/<int:id>/', views.delete_g, name='deletion'),
     path('edit/<int:pk>/', views.edit_g, name='edit_g'),
-    path('cart/increment/<int:id>/', views.increment_cart, name='increment_cart'),
+    path('cart ⟴/increment/<int:id>/', views.increment_cart, name='increment_cart'),
     path('cart/decrement/<int:id>/', views.decrement_cart, name='decrement_cart'),
     path('remove-from-wishlist/<int:id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('add-to-wishlist/<int:id>/', views.add_to_wishlist, name='add_to_wishlist'),
@@ -36,10 +37,13 @@ urlpatterns = [
     path('buy-now/<int:product_id>/', views.buy_now, name='buy_now'),
     path('my-orders/', views.my_orders, name='my_orders'),
     path('orders/', views.admin_orders, name='admin_orders'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('razorpay_callback/', views.razorpay_callback, name='razorpay_callback'),
+    # path('admin/orders/', views.admin_orders, name='admin_orders'),
+    path('complete/<int:order_id>/', views.complete_order, name='complete_order'),
+    
 
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
