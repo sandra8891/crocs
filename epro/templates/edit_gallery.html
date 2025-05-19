@@ -8,7 +8,7 @@
     <title>Edit Product</title>
 </head>
 <body>
-    <h2><span class="highlight">Crocs</span>Hub</h2>
+    <a href="{% url 'adminindex' %}">CrocsHub</a>
     <h2>Edit Product</h2>
     <form method="POST"-enctype="multipart/form-data">
         {% csrf_token %}
@@ -30,6 +30,6 @@
         <label>Image 5:</label><input type="file" name="feedimage5"><br>
         <button type="submit">Update</button>
     </form>
-    <a href="{% url 'adminindex' %}">Back to Admin Index</a>
+    <!-- <a href="{% url 'adminindex' %}">Back to Admin Index</a> -->
 </body>
 </html>

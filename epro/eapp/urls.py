@@ -40,7 +40,6 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('razorpay_callback/', views.razorpay_callback, name='razorpay_callback'),
     # path('admin/orders/', views.admin_orders, name='admin_orders'),
-    path('complete/<int:order_id>/', views.complete_order, name='complete_order'),
     
 
 ]

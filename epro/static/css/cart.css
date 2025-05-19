@@ -244,10 +244,35 @@ body.rr {
     font-weight: bold;
 }
 
+/* Checkout Button */
+.checkout-button {
+    background-color: #ff4081;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 15px;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.checkout-button:hover {
+    background-color: #e63573;
+    transform: scale(1.05);
+}
+
+.checkout-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 64, 129, 0.3);
+}
+
 /* Footer */
 .footer {
-    background-color: #222;
-    color: white;
+    background-color: black;
+    color: white+white;
     padding: 40px 60px;
     display: flex;
     justify-content: space-between;

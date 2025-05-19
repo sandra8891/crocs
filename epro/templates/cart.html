@@ -31,7 +31,6 @@
     <!-- Main Navigation Bar -->
     <div class="nav">
         <div class="logo">
-            <!-- <img src="{% static 'image/logo.jpeg' %}" alt="crocs"> -->
              <h2><span class="highlight">Crocs</span>Hub</h2>
         </div>
         <div class="left">
@@ -40,22 +39,12 @@
             <a href="{% url 'category_products' category='men' %}"><div>MEN</div></a>
             <a href="{% url 'category_products' category='unisex' %}"><div>UNISEX</div></a>
             <a href="{% url 'new_arrivals_page' %}"><div>NEW ARRIVALS</div></a>
-            <!-- <a href="{% url 'about_us' %}"><div>ABOUT US</div></a> -->
-            <div class="back-to-home">
-                <!-- <a href="{% url 'firstpage' %}">Back to Home</a> -->
-            </div>
         </div>
         <div class="right">
             <form action="{% url 'search_results' %}" method="get">
                 <input type="text" name="q" placeholder="Search " class="search-input">
                 <button type="submit"><i class="bi bi-search"></i></button>
             </form>
-            <div>
-                <!-- <a href="{% url 'wishlist_view' %}">
-                <i class="bi bi-heart-fill"></i>
-                <span>{{ wishlist_item_count }}</span>
-            </a> -->
-        </div>
             <div class="cart-icon">
                 <a href="{% url 'cart_view' %}">
                     <i class="bi bi-cart-fill"></i>
@@ -95,15 +84,13 @@
                         <img src="{{ item.product.feedimage1.url }}" alt="Product Image">
                     </a>
                 </div>
-                
             </div>
         {% endfor %}
-        
     </div>
     <div class="cart-summary">
         <p>Total Price: ₹{{ total_price }}</p>
+        <a href="{% url 'checkout' %}"><button class="checkout-button">Checkout</button></a>
     </div>
-    <a href="{% url 'checkout' %}"><button>checkout</button></a>
     {% else %}
       <p>Your cart is empty.</p>
     {% endif %}
@@ -146,6 +133,5 @@
             </ul>
         </div>
     </div>
-
 </body>
 </html>

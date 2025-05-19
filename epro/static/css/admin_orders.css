@@ -1,188 +1,167 @@
-/* static/css/admin_orders.css */
-
-/* General Reset */
+/* General Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body Styling */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f7fa;
+    color: #2d3748;
     line-height: 1.6;
 }
 
-/* Top Navigation Bar */
-.topnav {
-    background-color: #333;
-    color: #fff;
-    padding: 12px 20px;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 500;
+/* Navigation Bar */
+nav {
+    background-color: #ffffff;
+    padding: 15px 20px;
+    width: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.topnav p {
-    margin: 0;
+nav a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #0056b3;
 }
 
 /* Orders Container */
 .orders-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 30px auto;
-    padding: 40px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
 }
 
 .orders-container h2 {
     text-align: center;
-    font-size: 2rem;
-    color: #333;
     margin-bottom: 25px;
-    font-weight: 600;
+    color: #1a202c;
+    font-size: 2em;
+    font-weight: 700;
 }
 
-/* Alert Styling for Success Messages */
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-    border-radius: 6px;
+/* Alert Messages */
+.alert {
     padding: 15px;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 1rem;
-}
-
-/* Table Styling */
-.table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
     margin-bottom: 25px;
     border-radius: 8px;
-    overflow: hidden;
-    background-color: #fff;
+    text-align: center;
+    font-size: 1em;
+    animation: fadeIn 0.5s ease-in;
 }
 
-.table thead {
-    background-color: #007bff;
-    color: #fff;
+.alert-success {
+    background-color: #e6ffed;
+    color: #2f855a;
+    border: 1px solid #68d391;
+}
+
+/* Table Styles */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.table th,
+.table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .table th {
-    padding: 15px;
-    text-align: left;
+    background-color: #2d3748;
+    color: #ffffff;
     font-weight: 600;
-    font-size: 0.95rem;
     text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 0.5px;
 }
 
-.table tbody tr {
-    transition: background-color 0.2s;
+.table tr {
+    transition: background-color 0.2s ease;
 }
 
-.table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+.table tr:hover {
+    background-color: #f7fafc;
 }
 
-.table tbody tr:hover {
-    background-color: #f1f3f5;
-}
-
-.table td {
-    padding: 15px;
-    border-bottom: 1px solid #dee2e6;
-    font-size: 0.9rem;
-    vertical-align: middle;
-}
-
-/* Complete Button */
-.complete-btn {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.complete-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
-
-.complete-btn:active {
-    transform: translateY(0);
-}
-
-/* Completed Text */
-.completed-text {
-    color: #28a745;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-/* Back to Admin Index Button */
+/* Back Button Styles */
 .back-btn {
-    display: block;
-    width: fit-content;
-    margin: 20px auto;
+    display: inline-block;
+    background-color: #4a5568;
+    color: #ffffff;
     padding: 12px 24px;
-    background-color: #6c757d;
-    color: #fff;
     text-decoration: none;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-size: 1em;
     font-weight: 500;
-    border-radius: 5px;
-    text-align: center;
     transition: background-color 0.3s, transform 0.2s;
+    margin: 20px auto;
+    text-align: center;
+    display: block;
+    max-width: 200px;
 }
 
 .back-btn:hover {
-    background-color: #5a6268;
+    background-color: #2d3748;
     transform: translateY(-2px);
 }
 
-.back-btn:active {
-    transform: translateY(0);
-}
-
 /* No Orders Message */
-p {
+.orders-container p {
     text-align: center;
-    font-size: 1.1rem;
-    color: #6c757d;
+    font-size: 1.1em;
+    color: #718096;
     margin: 20px 0;
 }
 
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .table th,
+    .table td {
+        padding: 12px;
+    }
 
-
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
     .orders-container {
-        margin: 15px;
-        padding: 15px;
+        padding: 0 15px;
     }
+}
 
-    .orders-container h2 {
-        font-size: 1.5rem;
-    }
-
+@media (max-width: 768px) {
     .table {
         display: block;
         overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .table th,
+    .table td {
+        min-width: 120px;
     }
 
     .table thead {
@@ -192,70 +171,54 @@ p {
     .table tbody tr {
         display: block;
         margin-bottom: 15px;
-        border: 1px solid #dee2e6;
-        border-radius: 6px;
-    }
-
-    .table tbody td {
-        display: block;
-        text-align: right;
+        border-bottom: 2px solid #e2e8f0;
         padding: 10px;
-        position: relative;
-        border: none;
-        border-bottom: 1px solid #dee2e6;
+        background-color: #ffffff;
+        border-radius: 8px;
     }
 
-    .table tbody td:last-child {
+    .table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right;
+        padding: 10px 15px;
         border-bottom: none;
     }
 
-    .table tbody td::before {
+    .table td:before {
         content: attr(data-label);
-        position: absolute;
-        left: 10px;
-        font-weight: bold;
-        color: #495057;
-        text-transform: uppercase;
-        font-size: 0.85rem;
+        font-weight: 600;
+        color: #2d3748;
+        text-align: left;
+        flex: 1;
     }
 
-    .complete-btn {
-        width: 100%;
-        padding: 10px;
+    .table td:not(:last-child) {
+        border-bottom: 1px solid #edf2f7;
+    }
+}
+
+@media (max-width: 480px) {
+    nav {
+        padding: 10px 15px;
     }
 
-    .completed-text {
-        display: block;
-        text-align: right;
-        padding: 10px;
+    nav a {
+        font-size: 1.5rem;
+    }
+
+    .orders-container h2 {
+        font-size: 1.6em;
     }
 
     .back-btn {
         width: 100%;
-        padding: 12px;
-    }
-}
-
-@media (max-width: 576px) {
-    .topnav {
-        padding: 10px;
-        font-size: 1rem;
-    }
-
-    .orders-container h2 {
-        font-size: 1.3rem;
-    }
-
-    .alert-success {
-        font-size: 0.9rem;
+        max-width: none;
         padding: 10px;
     }
 
     .table td {
-        font-size: 0.85rem;
-    }
-
-    .complete-btn, .back-btn {
-        font-size: 0.85rem;
+        font-size: 0.9em;
     }
 }

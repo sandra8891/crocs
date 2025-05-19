@@ -29,8 +29,7 @@
 
     <div class="nav">
         <div class="logo">
-            <!-- <img src="{% static 'image/logo.jpeg' %}" alt="crocs"> -->
-             <h2><span class="highlight">Crocs</span>Hub</h2>
+            <h2><span class="highlight">Crocs</span>Hub</h2>
         </div>
         <div class="left">
             <a href="{% url 'firstpage' %}"><div>HOME</div></a>
@@ -44,11 +43,6 @@
                 <input type="text" name="q" placeholder="Search " class="search-input">
                 <button type="submit"><i class="bi bi-search"></i></button>
             </form>
-            <!-- <div><a href="{% url 'wishlist_view' %}">
-            <i class="bi bi-heart-fill"></i>
-            <span>{{ wishlist_item_count }}</span>
-        </a></div> -->
-
             <div class="cart-icon">
                 <a href="{% url 'cart_view' %}">
                     <i class="bi bi-cart-fill"></i>
@@ -89,13 +83,18 @@
                     <p class="product-title">{{ i.name }}</p>
                     <p class="product-description">{{ i.description|default:"No description available" }}</p>
                     <p class="product-price">₹{{ i.price }}</p>
-                    <form action="{% url 'add_to_cart' i.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit">Add to Cart</button>
-                    </form>
+                    {% if i.in_cart %}
+                        <form action="{% url 'cart_view' %}" method="get">
+                            <button type="submit">Go to Cart</button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'add_to_cart' i.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    {% endif %}
+                    <br>
                     <form action="{% url 'buy_now' i.id %}" method="get" style="display: inline;">
-                        <label for="quantity-{{ i.id }}">Quantity:</label>
-                        <input type="number" name="quantity" id="quantity-{{ i.id }}" value="1" min="1" max="{{ i.quantity }}" required>
                         <button type="submit" class="btn btn-primary">Buy Now</button>
                     </form>
                 </div>

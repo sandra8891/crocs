@@ -284,14 +284,18 @@ def products(request, id):
     gallery_images = Gallery.objects.filter(pk=id)
     if request.user.is_authenticated:
         cart_item_count = Cart.objects.filter(user=request.user).count()
+        # Check if the product is in the user's cart
+        for image in gallery_images:
+            image.in_cart = Cart.objects.filter(user=request.user, product=image).exists()
     else:
-        cart_item_count = 0 
+        cart_item_count = 0
+        for image in gallery_images:
+            image.in_cart = False 
     
     return render(request, 'products.html', {
         "gallery_images": gallery_images,
         "cart_item_count": cart_item_count
     })
-
 
 
 def add_to_cart(request, id):
@@ -651,11 +655,7 @@ def checkout(request):
 def buy_now(request, product_id):
     product = get_object_or_404(Gallery, id=product_id)
     user_profile = UserProfile.objects.filter(user=request.user).first()
-    quantity = int(request.GET.get('quantity', 1))
-
-    if quantity < 1:
-        messages.error(request, "Quantity must be at least 1.")
-        return redirect('products', id=product_id)
+    quantity = 1  # Default quantity to 1
 
     if product.quantity < quantity:
         messages.error(request, f"Only {product.quantity} units available.")
@@ -734,6 +734,7 @@ def buy_now(request, product_id):
     }
     return render(request, 'buy_now.html', context)
 
+
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     
@@ -749,22 +750,10 @@ def my_orders(request):
 
 @staff_member_required
 def admin_orders(request):
-    orders = Order.objects.all()  # Get all orders
+    orders = Order.objects.all()
     for order in orders:
-        order.total_price = order.quantity * order.product.price  # Calculate total price for each order
+        order.total_price = order.quantity * order.product.price
     return render(request, 'admin_orders.html', {'orders': orders})
-
-@staff_member_required
-def complete_order(request, order_id):
-    if request.method == "POST":
-        order = get_object_or_404(Order, id=order_id)
-        if order.status != 'COMPLETED':
-            order.status = 'COMPLETED'
-            order.save()
-            messages.success(request, f"Order {order.id} marked as COMPLETED.")
-        else:
-            messages.info(request, f"Order {order.id} is already COMPLETED.")
-    return redirect('admin_orders')
 
 
 
